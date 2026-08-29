@@ -213,6 +213,7 @@ const Cacada = (function () {
 
   // ---------------- Seletor de temas ----------------
   function prepararSelecaoTemas() {
+    temaEmAbertura = null; // libera a escolha de um novo tema
     el.cenario.hidden = true;
     el.temas.hidden = false;
     marcarRotina(-1);
@@ -259,7 +260,14 @@ const Cacada = (function () {
   // Classes de cenário com visual próprio no CSS (as demais usam o padrão).
   const CENARIOS_COM_ESTILO = { dinos: 1, carros: 1, animais: 1 };
 
+  let temaEmAbertura = null; // chave do tema que está sendo aberto agora
+
   function escolherTema(chave) {
+    // Idempotente: se este tema já está sendo aberto, ignora chamadas
+    // repetidas (toque duplo, narração + rede de segurança, etc.).
+    if (temaEmAbertura === chave) return;
+    temaEmAbertura = chave;
+
     temaAtual = TEMAS[chave];
     // Aplica o visual do tema; se a chave não tiver estilo próprio, usa base.
     const classeVisual = CENARIOS_COM_ESTILO[chave] ? "cenario--" + chave : "cenario--tema";

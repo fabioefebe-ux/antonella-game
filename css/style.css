@@ -23,6 +23,15 @@
   padding: 0;
 }
 
+/* O atributo HTML "hidden" deve SEMPRE esconder o elemento. Sem isto, uma
+   regra de display (ex.: .temas { display: flex }) venceria o hidden e o
+   elemento continuaria visível. O !important garante a prioridade correta.
+   (Elementos que precisam de outra semântica de hidden ficam de fora via
+   :not, mas aqui nenhum precisa.) */
+[hidden] {
+  display: none !important;
+}
+
 html,
 body {
   min-height: 100%;
