@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Confete.explodir(140);
       mostrarFeedback("⭐ PARABÉNS, " + NOME + "! VOCÊ CONSEGUIU! ⭐", "acerto");
       Voz.falar("Parabéns, " + NOME + "! Você conseguiu!", {
+        audio: "parabens",
         aoTerminar: function () {
           setTimeout(novaRodada, 600);
         },
@@ -134,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
         botao.classList.remove("opcao--erro");
       }, 500);
       mostrarFeedback("QUASE LÁ, " + NOME + "! TENTE OUVIR DE NOVO 🔊", "erro");
-      Voz.falar("Quase lá, " + NOME + "! Tente ouvir de novo.");
+      Voz.falar("Quase lá, " + NOME + "! Tente ouvir de novo.", { audio: "quase_la" });
     }
   }
 
@@ -248,6 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
   btnJogar.addEventListener("click", function () {
     // Fala ao ser clicado e abre a seleção de fases.
     Voz.falar("Vamos brincar, " + NOME + "! Escolha uma fase.", {
+      audio: "vamos_brincar",
       aoTerminar: abrirSelecaoFases,
     });
     // Segurança: se a voz não estiver disponível, abre a seleção mesmo assim.
@@ -307,6 +309,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (btnCacada) {
     btnCacada.addEventListener("click", function () {
       Voz.falar("Vamos para a Caçada dos Sons, " + NOME + "!", {
+        audio: "vamos_cacada",
         aoTerminar: iniciarCacada,
       });
       if (!Voz.suportado) iniciarCacada();
@@ -321,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   btnOuvirTitulo.addEventListener("click", function () {
-    Voz.falar(TITULO);
+    Voz.falar(TITULO, { audio: "titulo" });
   });
 
   btnOuvirPalavra.addEventListener("click", repetirPalavra);

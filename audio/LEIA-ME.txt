@@ -1,0 +1,53 @@
+========================================================================
+ ÁUDIOS PRÉ-GRAVADOS — Mundo Mágico da Antonella
+========================================================================
+
+COMO FUNCIONA
+-------------
+O jogo tenta tocar um arquivo MP3 desta pasta para as falas mais
+importantes. Se o arquivo NÃO existir, ele usa a voz do navegador
+automaticamente (nada quebra). Ou seja: você pode gerar os áudios aos
+poucos, um de cada vez, e ir testando.
+
+O NOME DO ARQUIVO IMPORTA. Ele precisa ser EXATAMENTE o indicado abaixo,
+tudo minúsculo, terminando em .mp3, salvo dentro desta pasta audio/.
+
+
+PASSO A PASSO PARA GERAR (ElevenLabs — plano gratuito)
+------------------------------------------------------
+1. Crie uma conta grátis em https://elevenlabs.io
+2. Vá em "Text to Speech".
+3. Escolha uma voz em Português do Brasil que soe infantil/carinhosa
+   (dica: procure vozes femininas; teste algumas com uma frase curta).
+4. Cole o TEXTO de uma linha da lista abaixo, gere e clique em Download.
+5. Renomeie o arquivo baixado para o NOME indicado (ex.: parabens.mp3).
+6. Coloque o arquivo aqui na pasta audio/.
+7. Repita para as próximas frases.
+
+Dica: mantenha a MESMA voz em todos os arquivos para não soar estranho.
+São poucas frases curtas — cabe folgado nos 10 minutos gratuitos/mês.
+
+
+LISTA DE ARQUIVOS PARA GERAR
+----------------------------
+(NOME DO ARQUIVO  ->  TEXTO QUE VOCÊ COLA NO ELEVENLABS)
+
+parabens.mp3        ->  Parabéns, Antonella! Você conseguiu!
+quase_la.mp3        ->  Quase lá, Antonella! Tente ouvir de novo.
+vamos_brincar.mp3   ->  Vamos brincar, Antonella! Escolha uma fase.
+vamos_cacada.mp3    ->  Vamos para a Caçada dos Sons, Antonella!
+titulo.mp3          ->  Mundo Mágico da Antonella
+escolha_mundo.mp3   ->  Antonella, escolha o seu mundo favorito para começar a caçada!
+quase_procure.mp3   ->  Quase lá, Antonella! Procure de novo.
+montou_tudo.mp3     ->  Uau, Antonella! Você montou todas as palavras. Ganhou o prêmio!
+terminou_fase.mp3   ->  Uau, Antonella! Você terminou a fase inteira! Que orgulho!
+
+
+DEPOIS DE COLOCAR OS ARQUIVOS
+-----------------------------
+1. Faça commit e push pelo GitHub Desktop (como sempre).
+2. Abra no celular e teste. As frases gravadas devem tocar com a voz
+   premium; o restante continua com a voz do navegador.
+
+Se quiser gravar MAIS falas depois, me peça: eu adiciono a "chave" de
+áudio na fala que você quiser e te digo o nome do arquivo aqui.

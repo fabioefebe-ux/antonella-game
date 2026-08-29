@@ -63,6 +63,7 @@ const Fase1 = (function () {
     mostrarFeedback("⭐ PARABÉNS, " + NOME + "! VOCÊ CONSEGUIU! ⭐", "acerto");
     if (typeof Fase1.aoGanharEstrela === "function") Fase1.aoGanharEstrela();
     Voz.falar("Parabéns, " + NOME + "! Você conseguiu!", {
+      audio: "parabens",
       aoTerminar: function () {
         setTimeout(avancarCena, 700);
       },
@@ -71,7 +72,7 @@ const Fase1 = (function () {
 
   function incentivarErro() {
     mostrarFeedback("QUASE LÁ, " + NOME + "! TENTE OUVIR DE NOVO 🔊", "erro");
-    Voz.falar("Quase lá, " + NOME + "! Tente ouvir de novo.");
+    Voz.falar("Quase lá, " + NOME + "! Tente ouvir de novo.", { audio: "quase_la" });
   }
 
   // ---------------- Renderização por tipo ----------------
@@ -445,6 +446,7 @@ const Fase1 = (function () {
       Voz.falar(
         "Uau, " + NOME + "! Você terminou a fase inteira! Que orgulho!",
         {
+          audio: "terminou_fase",
           aoTerminar: function () {
             if (typeof aoConcluir === "function") aoConcluir();
           },

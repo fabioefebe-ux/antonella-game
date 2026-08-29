@@ -252,7 +252,9 @@ const Cacada = (function () {
       });
     }
 
-    Voz.falar(NOME + ", escolha o seu mundo favorito para começar a caçada!");
+    Voz.falar(NOME + ", escolha o seu mundo favorito para começar a caçada!", {
+      audio: "escolha_mundo",
+    });
   }
 
   // Classes de cenário com visual próprio no CSS (as demais usam o padrão).
@@ -367,7 +369,7 @@ const Cacada = (function () {
           setTimeout(function () {
             b.classList.remove("card--erro");
           }, 500);
-          Voz.falar("Quase lá, " + NOME + "! Procure de novo.");
+          Voz.falar("Quase lá, " + NOME + "! Procure de novo.", { audio: "quase_procure" });
         }
       };
       linha.appendChild(b);
@@ -785,7 +787,7 @@ const Cacada = (function () {
       mostrarFeedback("⭐ VOCÊ COMPLETOU TODAS AS PALAVRAS! ⭐", "acerto");
       Voz.falar(
         "Uau, " + NOME + "! Você montou todas as palavras. Ganhou o prêmio!",
-        { aoTerminar: iniciarMinijogo }
+        { audio: "montou_tudo", aoTerminar: iniciarMinijogo }
       );
       if (!Voz.suportado) setTimeout(iniciarMinijogo, 800);
     } else {
