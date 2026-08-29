@@ -25,7 +25,7 @@
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -33,11 +33,16 @@ body {
   color: var(--cor-texto);
   background: linear-gradient(160deg, var(--cor-fundo-1), var(--cor-fundo-2));
   background-attachment: fixed;
-  overflow: hidden;
+  /* No celular a barra de endereço aparece/some; 100dvh acompanha a
+     altura REAL visível. Sem overflow:hidden para permitir rolar quando o
+     conteúdo (ex.: Caçada dos Sons) não couber na tela. */
+  min-height: 100vh;
+  min-height: 100dvh;
   text-transform: uppercase;      /* tudo em LETRAS BASTÃO */
   letter-spacing: 0.06em;         /* bem espaçado */
   -webkit-user-select: none;
   user-select: none;
+  -webkit-text-size-adjust: 100%; /* evita o iOS aumentar fontes sozinho */
 }
 
 /* ---------------- Telas ---------------- */
@@ -51,12 +56,31 @@ body {
   gap: 28px;
   padding: 24px;
   text-align: center;
+  /* Se o conteúdo for mais alto que a tela (celular em pé), rola por dentro
+     em vez de ficar cortado. overscroll-behavior evita "puxar" a página. */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  /* Respeita notch / barra de gestos em celulares (viewport-fit=cover). */
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
 }
 
 .tela--ativa {
   display: flex;
   animation: aparecer 0.5s ease;
 }
+
+/* Truque para telas centralizadas: os filhos "empurram" com margem
+   automática. Quando tudo cabe, fica centralizado; quando estoura a altura,
+   o topo continua acessível ao rolar (o centralizar puro cortaria o topo). */
+.tela > :first-child { margin-top: auto; }
+.tela > :last-child { margin-bottom: auto; }
+
+/* Telas alinhadas ao topo (fases) não devem usar o truque acima. */
+.tela--fase > :first-child { margin-top: 0; }
+.tela--fase > :last-child { margin-bottom: 0; }
 
 @keyframes aparecer {
   from { opacity: 0; transform: scale(0.96); }
@@ -192,10 +216,11 @@ body {
 
 /* ---------------- Tela do jogo ---------------- */
 .jogo-topo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
+  position: fixed;
+  top: max(20px, env(safe-area-inset-top));
+  left: max(20px, env(safe-area-inset-left));
+  right: max(20px, env(safe-area-inset-right));
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -287,7 +312,11 @@ body {
 /* ---------------- Fase 1: história interativa ---------------- */
 .tela--fase {
   justify-content: flex-start;
-  padding-top: 96px;
+  /* Deixa espaço para o cabeçalho fixo, somando o notch superior. */
+  padding-top: calc(96px + env(safe-area-inset-top));
+  /* Espaço extra no rodapé para os comandos PECS / letras móveis não
+     encostarem na borda inferior do celular ao rolar. */
+  padding-bottom: max(40px, env(safe-area-inset-bottom));
   gap: 18px;
 }
 
