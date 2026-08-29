@@ -110,12 +110,21 @@ const Voz = (function () {
 
       const a = new Audio(PASTA_AUDIO + chave + ".mp3");
       a.preload = "auto";
+
+      let resolvido = false;
+      function concluir(valor) {
+        if (resolvido) return;
+        resolvido = true;
+        clearTimeout(tempo);
+        resolve(valor);
+      }
+
       // canplaythrough = arquivo existe e está pronto para tocar.
       a.addEventListener(
         "canplaythrough",
         function () {
           cacheAudio[chave] = a;
-          resolve(a);
+          concluir(a);
         },
         { once: true }
       );
@@ -124,10 +133,16 @@ const Voz = (function () {
         "error",
         function () {
           cacheAudio[chave] = false;
-          resolve(null);
+          concluir(null);
         },
         { once: true }
       );
+      // Rede de segurança: se o arquivo demorar demais (rede lenta), não trava
+      // a narração esperando; usa a voz nativa agora. NÃO marca como ausente no
+      // cache, então numa próxima vez ele ainda pode carregar do cache do disco.
+      const tempo = setTimeout(function () {
+        concluir(null);
+      }, 1500);
     });
   }
 
@@ -169,11 +184,25 @@ const Voz = (function () {
       /* alguns navegadores reclamam antes de carregar; ignora */
     }
 
-    function terminar() {
+    const aoTerminar =
+      typeof opcoes.aoTerminar === "function" ? opcoes.aoTerminar : null;
+
+    // Registra o término como pendente (mesmo mecanismo da fala nativa), para
+    // que parar() ou uma nova fala não deixem a navegação presa.
+    let registro = null;
+    if (aoTerminar) {
+      registro = { fn: aoTerminar, timer: null };
+      terminoPendente = registro;
+    }
+    function limparListeners() {
       audio.removeEventListener("ended", terminar);
       audio.removeEventListener("error", terminar);
+    }
+    function terminar() {
+      limparListeners();
       if (audioAtual === audio) audioAtual = null;
-      if (typeof opcoes.aoTerminar === "function") opcoes.aoTerminar();
+      if (registro && terminoPendente === registro) resolverPendente();
+      else if (!registro && aoTerminar) aoTerminar();
     }
     audio.addEventListener("ended", terminar);
     audio.addEventListener("error", terminar);
@@ -182,18 +211,45 @@ const Voz = (function () {
     // Se o navegador bloquear o play (sem gesto do usuário), cai na voz nativa.
     if (p && typeof p.catch === "function") {
       p.catch(function () {
-        audio.removeEventListener("ended", terminar);
-        audio.removeEventListener("error", terminar);
+        limparListeners();
         if (audioAtual === audio) audioAtual = null;
+        // Cancela a pendência do áudio para o falarNativo criar a sua própria.
+        if (registro && terminoPendente === registro) terminoPendente = null;
         falarNativo(opcoes._textoFallback || "", opcoes);
       });
     }
   }
 
+  // Callback da narração nativa que ainda não terminou. Guardamos aqui para
+  // garantir que ele SEMPRE dispare uma vez — inclusive quando a fala é
+  // cancelada por outra ou quando o evento onend não chega (comum no celular).
+  let terminoPendente = null;
+
+  // Dispara (uma única vez) o callback de término pendente, se houver.
+  function resolverPendente() {
+    if (!terminoPendente) return;
+    const cb = terminoPendente;
+    terminoPendente = null;
+    if (cb.timer) clearTimeout(cb.timer);
+    if (typeof cb.fn === "function") cb.fn();
+  }
+
+  // Estima quanto tempo uma fala deve durar (ms), pelo tamanho do texto e
+  // pela velocidade. Serve de rede de segurança caso o onend nunca dispare.
+  function duracaoEstimada(texto, rate) {
+    const palavras = (texto || "").trim().split(/\s+/).length;
+    // ~0,42s por palavra em rate 1; ajusta pela velocidade + folga fixa.
+    const base = (palavras * 420) / (rate || 1);
+    return Math.min(15000, Math.max(1500, base + 1200));
+  }
+
   // Fala usando a síntese de voz do navegador (comportamento original).
   function falarNativo(texto, opcoes) {
+    const aoTerminar =
+      typeof opcoes.aoTerminar === "function" ? opcoes.aoTerminar : null;
+
     if (!suportado || !texto) {
-      if (typeof opcoes.aoTerminar === "function") opcoes.aoTerminar();
+      if (aoTerminar) aoTerminar();
       return;
     }
 
@@ -201,15 +257,28 @@ const Voz = (function () {
 
     const fala = new SpeechSynthesisUtterance(texto);
     fala.lang = "pt-BR";
-    fala.rate = opcoes.rate != null ? opcoes.rate : ratePadrao; // calma e legível
+    const rate = opcoes.rate != null ? opcoes.rate : ratePadrao;
+    fala.rate = rate; // calma e legível
     fala.pitch = opcoes.pitch != null ? opcoes.pitch : 1.05; // tom amigável, sem soar agudo/robótico
     fala.volume = 1;
 
     if (vozPtBr) fala.voice = vozPtBr;
 
-    if (typeof opcoes.aoTerminar === "function") {
-      fala.onend = opcoes.aoTerminar;
-      fala.onerror = opcoes.aoTerminar;
+    if (aoTerminar) {
+      // Registra o callback como pendente, protegido contra dupla execução.
+      const registro = { fn: aoTerminar, timer: null };
+      terminoPendente = registro;
+
+      const concluir = function () {
+        // Só resolve se este registro ainda é o pendente (não foi substituído).
+        if (terminoPendente === registro) resolverPendente();
+      };
+      fala.onend = concluir;
+      fala.onerror = concluir;
+
+      // Rede de segurança: no celular o onend às vezes não dispara. Garante
+      // que a navegação siga mesmo assim, após a duração estimada da fala.
+      registro.timer = setTimeout(concluir, duracaoEstimada(texto, rate));
     }
 
     window.speechSynthesis.speak(fala);
@@ -217,6 +286,10 @@ const Voz = (function () {
 
   /** Interrompe imediatamente qualquer narração em andamento. */
   function parar() {
+    // Resolve o callback pendente ANTES de cancelar: assim uma fala nova nunca
+    // "engole" a navegação que dependia do término da fala anterior.
+    resolverPendente();
+
     if (suportado) window.speechSynthesis.cancel();
     if (audioAtual) {
       try {

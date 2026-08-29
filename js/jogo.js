@@ -229,12 +229,13 @@ document.addEventListener("DOMContentLoaded", function () {
       botao.addEventListener("touchstart", falarFase, { passive: true });
 
       botao.addEventListener("click", function () {
+        // Voz.falar garante o disparo de aoTerminar mesmo sem voz/áudio,
+        // então não é preciso (nem correto) chamar iniciarFase duas vezes.
         Voz.falar("Vamos jogar... " + fase.titulo + "!", {
           aoTerminar: function () {
             iniciarFase(fase);
           },
         });
-        if (!Voz.suportado) iniciarFase(fase);
       });
 
       listaFases.appendChild(botao);
@@ -252,8 +253,6 @@ document.addEventListener("DOMContentLoaded", function () {
       audio: "vamos_brincar",
       aoTerminar: abrirSelecaoFases,
     });
-    // Segurança: se a voz não estiver disponível, abre a seleção mesmo assim.
-    if (!Voz.suportado) abrirSelecaoFases();
   });
 
   if (fasesVoltar) {
@@ -312,7 +311,6 @@ document.addEventListener("DOMContentLoaded", function () {
         audio: "vamos_cacada",
         aoTerminar: iniciarCacada,
       });
-      if (!Voz.suportado) iniciarCacada();
     });
   }
 

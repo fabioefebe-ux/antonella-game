@@ -245,7 +245,6 @@ const Cacada = (function () {
               escolherTema(chave);
             },
           });
-          if (!Voz.suportado) escolherTema(chave);
         };
 
         lista.appendChild(btn);
@@ -323,9 +322,8 @@ const Cacada = (function () {
     };
     el.palco.appendChild(btnOuvir);
 
-    // Narra a história; ao terminar, libera o começo automaticamente.
+    // Narra a história; ao terminar (garantido pelo voz.js), libera o começo.
     Voz.falar(texto, { aoTerminar: comecar });
-    if (!Voz.suportado) setTimeout(comecar, 800);
   }
 
   // ================= PASSO 1: ENCONTRO DO ALVO (👁️) =================
@@ -363,7 +361,6 @@ const Cacada = (function () {
             NOME + "! Você encontrou " + alvo.artigo + " " + palavraExibida() + "!",
             { aoTerminar: iniciarPassoFonema }
           );
-          if (!Voz.suportado) setTimeout(iniciarPassoFonema, 400);
         } else {
           b.classList.add("card--erro");
           setTimeout(function () {
@@ -406,11 +403,6 @@ const Cacada = (function () {
           card.classList.remove("alvo-fonico--vibrando");
         },
       });
-      if (!Voz.suportado) {
-        setTimeout(function () {
-          card.classList.remove("alvo-fonico--vibrando");
-        }, 1200);
-      }
     }
     card.onclick = function () {
       if (bloqueado) return;
@@ -656,11 +648,6 @@ const Cacada = (function () {
           bloco.classList.remove("letra-movel--soando");
         },
       });
-      if (!Voz.suportado) {
-        setTimeout(function () {
-          bloco.classList.remove("letra-movel--soando");
-        }, 700);
-      }
     }
     bloco.onmouseenter = tocarFonemaLetra;
     bloco.onfocus = tocarFonemaLetra;
@@ -749,7 +736,6 @@ const Cacada = (function () {
       "!";
     mostrarFeedback("👏 MUITO BEM, " + NOME + "! 👏", "acerto");
     Voz.falar(frase, { aoTerminar: iniciarPassoPremio });
-    if (!Voz.suportado) setTimeout(iniciarPassoPremio, 600);
   }
 
   // Primeira vogal após a inicial (para "L com O").
@@ -789,7 +775,6 @@ const Cacada = (function () {
         "Uau, " + NOME + "! Você montou todas as palavras. Ganhou o prêmio!",
         { audio: "montou_tudo", aoTerminar: iniciarMinijogo }
       );
-      if (!Voz.suportado) setTimeout(iniciarMinijogo, 800);
     } else {
       // Ainda há palavras -> comemora a estrela e vai para a próxima.
       mostrarFeedback(
@@ -807,10 +792,6 @@ const Cacada = (function () {
           },
         }
       );
-      if (!Voz.suportado) {
-        selecionarPalavra(indicePalavra + 1);
-        setTimeout(iniciarPassoProcurar, 800);
-      }
     }
   }
 
@@ -892,9 +873,6 @@ const Cacada = (function () {
             }, 400);
           },
         });
-        if (!Voz.suportado && typeof aoConcluir === "function") {
-          setTimeout(aoConcluir, 600);
-        }
       }
     }, 1000);
   }
