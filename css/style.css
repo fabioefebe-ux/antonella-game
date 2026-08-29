@@ -26,6 +26,9 @@
 html,
 body {
   min-height: 100%;
+  /* Trava rolagem horizontal: nada deve vazar para os lados no celular. */
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -72,15 +75,22 @@ body {
   animation: aparecer 0.5s ease;
 }
 
-/* Truque para telas centralizadas: os filhos "empurram" com margem
-   automática. Quando tudo cabe, fica centralizado; quando estoura a altura,
-   o topo continua acessível ao rolar (o centralizar puro cortaria o topo). */
-.tela > :first-child { margin-top: auto; }
-.tela > :last-child { margin-bottom: auto; }
+/* Telas centralizadas: quando o conteúdo é MAIOR que a altura visível, o
+   flexbox com justify-content:center cortaria o topo (sem como rolar até
+   ele). Garantimos o alinhamento ao topo nesse caso mantendo a rolagem. */
+.tela--ativa:not(.tela--fase) {
+  justify-content: safe center;
+}
 
-/* Telas alinhadas ao topo (fases) não devem usar o truque acima. */
-.tela--fase > :first-child { margin-top: 0; }
-.tela--fase > :last-child { margin-bottom: 0; }
+/* O cabeçalho (.jogo-topo) é fixo; telas que o contêm precisam reservar
+   espaço no topo para o conteúdo não ficar escondido atrás dele.
+   #tela-jogo e #tela-fases têm cabeçalho mas não são .tela--fase. */
+#tela-jogo.tela--ativa,
+#tela-fases.tela--ativa {
+  justify-content: flex-start;
+  padding-top: calc(100px + env(safe-area-inset-top));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
 
 @keyframes aparecer {
   from { opacity: 0; transform: scale(0.96); }
@@ -1077,6 +1087,110 @@ body {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ======================================================================
+   OTIMIZAÇÃO PARA CELULAR
+   ====================================================================== */
+
+/* Em telas de TOQUE (sem mouse real), os efeitos :hover ficam "presos"
+   depois de tocar (o botão continua levantado/destacado). Aqui neutralizamos
+   o hover nesses aparelhos; o feedback de toque fica por conta do :active. */
+@media (hover: none) {
+  .botao:hover,
+  .card:hover,
+  .tema:hover,
+  .balao:hover,
+  .letra-movel:hover,
+  .pecs__btn:hover,
+  .opcao:hover {
+    transform: none;
+    border-color: transparent;
+    filter: none;
+  }
+  .card:hover { border-color: transparent; }
+}
+
+/* --- Celulares (largura até 600px) --- */
+@media (max-width: 600px) {
+  /* Telas com menos respiro nas laterais para caber mais conteúdo. */
+  .tela {
+    gap: 20px;
+    padding: 16px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .tela--fase {
+    padding-top: calc(84px + env(safe-area-inset-top));
+  }
+
+  /* Botões gigantes: reduzir o padding lateral evita estourar a largura. */
+  .botao--gigante {
+    padding: 22px 32px;
+    max-width: 100%;
+  }
+
+  .botao--cacada {
+    padding: 18px 26px;
+    max-width: 100%;
+  }
+
+  /* Opções de resposta ocupam a largura toda (empilhadas), fáceis de tocar. */
+  .opcoes { gap: 14px; width: 100%; }
+  .opcao {
+    min-width: 0;
+    width: 100%;
+    max-width: 340px;
+    padding: 20px 24px;
+  }
+
+  /* Rotina TEACCH mais compacta para os 4 passos caberem. */
+  .rotina { gap: 6px; padding: 10px 10px; }
+  .rotina__passo { min-width: 68px; padding: 8px 8px; }
+  .rotina__seta { font-size: 1.1rem; }
+
+  /* Cards de fase: 2 por linha sem estourar (metade da largura menos o gap). */
+  .card--fase { width: calc(50% - 12px); }
+
+  /* Cenário com menos padding para o conteúdo interno respirar. */
+  .cenario { padding: 16px 12px; gap: 16px; }
+
+  /* Palavra a montar: não deixar as letras vazarem para os lados. */
+  .palavra-montar { flex-wrap: wrap; gap: 4px; }
+  .letras-palavra { gap: 8px; }
+  .letras-moveis { gap: 12px; }
+
+  /* Comandos PECS ocupam a linha inteira, distribuídos. */
+  .pecs { gap: 10px; width: 100%; }
+  .pecs__btn { min-width: 0; flex: 1 1 0; padding: 14px 8px; }
+
+  /* Botões de áudio/microfone não estouram a largura. */
+  .botao--audio-grande { padding: 14px 22px; font-size: 1.4rem; }
+  .botao--microfone { padding: 18px 26px; font-size: 2rem; }
+
+  /* Painel do educador: ações empilhadas para caber e serem fáceis de tocar. */
+  .painel-acoes { flex-direction: column; }
+  .painel-btn--limpar { margin-left: 0; }
+  .painel-tabela { font-size: 0.8rem; }
+  .painel-tabela th, .painel-tabela td { padding: 6px 6px; }
+}
+
+/* --- Celulares bem estreitos (até 380px) --- */
+@media (max-width: 380px) {
+  .titulo-jogo { font-size: clamp(2rem, 9vw, 3rem); }
+  .rotina__texto { font-size: 0.7rem; }
+  .rotina__passo { min-width: 60px; }
+  /* Cards de fase voltam a 1 por linha se ficarem apertados demais. */
+  .card--fase { width: 100%; max-width: 260px; }
+}
+
+/* --- Celular deitado (paisagem, pouca altura) --- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .tela--ativa:not(.tela--fase) { justify-content: flex-start; }
+  .mascote { font-size: clamp(3rem, 12vh, 5rem); }
+  .titulo-jogo { font-size: clamp(1.8rem, 8vh, 3rem); }
 }
 
 /* ======================================================================
