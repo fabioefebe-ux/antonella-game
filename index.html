@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mundo Mágico da Antonella</title>
+  <!-- Fonte lúdica Fredoka (arredondada e amigável) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ==================== TELA PRINCIPAL (MENU) ==================== -->
+  <section id="tela-menu" class="tela tela--ativa">
+    <div class="estrelas-fundo" aria-hidden="true">
+      <span class="estrela">⭐</span>
+      <span class="estrela">✨</span>
+      <span class="estrela">🌟</span>
+      <span class="estrela">⭐</span>
+      <span class="estrela">✨</span>
+    </div>
+
+    <h1 class="titulo-jogo">MUNDO MÁGICO<br />DA ANTONELLA</h1>
+
+    <div class="mascote" aria-hidden="true">🦄</div>
+
+    <button id="btn-jogar" class="botao botao--gigante botao--jogar">
+      <span class="botao__icone" aria-hidden="true">▶</span>
+      <span class="botao__texto">JOGAR</span>
+    </button>
+
+    <button id="btn-cacada" class="botao botao--gigante botao--cacada">
+      <span class="botao__icone" aria-hidden="true">🔍</span>
+      <span class="botao__texto">A CAÇADA DOS SONS</span>
+    </button>
+
+    <button id="btn-ouvir-titulo" class="botao botao--audio" aria-label="Ouvir o nome do jogo">
+      <span aria-hidden="true">🔊</span>
+    </button>
+  </section>
+
+  <!-- ==================== A CAÇADA DOS SONS (TEACCH + PECS) ==================== -->
+  <section id="tela-cacada" class="tela tela--fase">
+    <header class="jogo-topo">
+      <button id="cacada-voltar" class="botao botao--voltar" aria-label="Voltar ao menu">
+        <span aria-hidden="true">🏠</span>
+      </button>
+      <div id="cacada-placar" class="placar-estrelas" aria-label="Estrelas conquistadas"></div>
+    </header>
+
+    <!-- Painel de rotina visual (TEACCH): passo a passo da fase -->
+    <div id="rotina-teacch" class="rotina" role="list" aria-label="Passo a passo da fase">
+      <div class="rotina__passo" role="listitem" data-passo="0">
+        <span class="rotina__icone" aria-hidden="true">🔍</span>
+        <span class="rotina__texto">PROCURAR</span>
+      </div>
+      <span class="rotina__seta" aria-hidden="true">➔</span>
+      <div class="rotina__passo" role="listitem" data-passo="1">
+        <span class="rotina__icone" aria-hidden="true">🔊</span>
+        <span class="rotina__texto">OUVIR O SOM</span>
+      </div>
+      <span class="rotina__seta" aria-hidden="true">➔</span>
+      <div class="rotina__passo" role="listitem" data-passo="2">
+        <span class="rotina__icone" aria-hidden="true">🧩</span>
+        <span class="rotina__texto">MONTAR</span>
+      </div>
+      <span class="rotina__seta" aria-hidden="true">➔</span>
+      <div class="rotina__passo" role="listitem" data-passo="3">
+        <span class="rotina__icone" aria-hidden="true">⭐</span>
+        <span class="rotina__texto">PRÊMIO</span>
+      </div>
+    </div>
+
+    <!-- Seletor de tema de interesse -->
+    <div id="cacada-temas" class="temas">
+      <h2 class="temas__titulo">ESCOLHA O SEU MUNDO</h2>
+      <!-- Os cards de tema são gerados por cacada.js a partir de temas.js -->
+      <div class="temas__lista"></div>
+    </div>
+
+    <!-- Cenário do tema escolhido (aparece depois de escolher) -->
+    <div id="cacada-cenario" class="cenario" hidden>
+      <div id="cacada-fundo" class="cenario__fundo" aria-hidden="true"></div>
+      <p id="cacada-instrucao" class="cena__desafio"></p>
+      <div id="cacada-palco" class="palco"><!-- desafio gerado pelo JS --></div>
+    </div>
+
+    <!-- Cartões de comando visuais (PECS): fixos e grandes -->
+    <div id="cacada-pecs" class="pecs" aria-label="Comandos">
+      <button class="pecs__btn" data-comando="olhe" aria-label="Comando Olhe">
+        <span class="pecs__icone" aria-hidden="true">👁️</span>
+        <span class="pecs__texto">OLHE</span>
+      </button>
+      <button class="pecs__btn" data-comando="ouca" aria-label="Comando Ouça">
+        <span class="pecs__icone" aria-hidden="true">👂</span>
+        <span class="pecs__texto">OUÇA</span>
+      </button>
+      <button class="pecs__btn" data-comando="monte" aria-label="Comando Monte">
+        <span class="pecs__icone" aria-hidden="true">🧩</span>
+        <span class="pecs__texto">MONTE</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== TELA DO JOGO (ATIVIDADE) ==================== -->
+  <section id="tela-jogo" class="tela">
+    <header class="jogo-topo">
+      <button id="btn-voltar" class="botao botao--voltar" aria-label="Voltar ao menu">
+        <span aria-hidden="true">🏠</span>
+      </button>
+      <div id="placar-estrelas" class="placar-estrelas" aria-label="Estrelas conquistadas"></div>
+    </header>
+
+    <div class="atividade">
+      <p class="atividade__pergunta">QUAL É ESTA PALAVRA?</p>
+
+      <div id="figura-atividade" class="figura-atividade" aria-hidden="true">🍎</div>
+
+      <button id="btn-ouvir-palavra" class="botao botao--audio botao--audio-grande" aria-label="Ouvir a palavra de novo">
+        <span aria-hidden="true">🔊</span>
+        <span class="botao__texto-pequeno">OUVIR DE NOVO</span>
+      </button>
+
+      <div id="opcoes" class="opcoes"><!-- opções geradas pelo JS --></div>
+    </div>
+  </section>
+
+  <!-- ==================== TELA DE SELEÇÃO DE FASES ==================== -->
+  <section id="tela-fases" class="tela">
+    <header class="jogo-topo">
+      <button id="fases-voltar" class="botao botao--voltar" aria-label="Voltar ao menu">
+        <span aria-hidden="true">🏠</span>
+      </button>
+    </header>
+    <h2 class="titulo-fases">ESCOLHA UMA FASE</h2>
+    <div id="lista-fases" class="lista-fases"><!-- cards de fase gerados pelo JS --></div>
+  </section>
+
+  <!-- ==================== FASE — HISTÓRIA INTERATIVA ==================== -->
+  <section id="tela-fase1" class="tela tela--fase">
+    <header class="jogo-topo">
+      <button id="fase1-voltar" class="botao botao--voltar" aria-label="Voltar ao menu">
+        <span aria-hidden="true">🏠</span>
+      </button>
+      <div id="fase1-progresso" class="fase-progresso">CENA 1</div>
+      <div id="fase1-placar" class="placar-estrelas" aria-label="Estrelas conquistadas"></div>
+    </header>
+
+    <div class="cena">
+      <!-- Painel da história (o texto do livro, narrado em voz alta) -->
+      <div class="cena__historia">
+        <p id="fase1-historia" class="cena__texto"></p>
+        <button id="fase1-ouvir" class="botao botao--audio botao--audio-grande" aria-label="Ouvir a história de novo">
+          <span aria-hidden="true">🔊</span>
+          <span class="botao__texto-pequeno">OUVIR DE NOVO</span>
+        </button>
+      </div>
+
+      <!-- Enunciado do desafio (fônico, montar palavra ou falar) -->
+      <p id="fase1-desafio" class="cena__desafio"></p>
+
+      <!-- Palco: cada mecânica desenha aqui o que precisa -->
+      <div id="fase1-cards" class="cards"><!-- gerados pelo JS --></div>
+      <div id="fase1-palco" class="palco"><!-- arraste/microfone gerados pelo JS --></div>
+    </div>
+  </section>
+
+  <!-- ==================== CAMADA DE CONFETES ==================== -->
+  <canvas id="canvas-confete" class="canvas-confete" aria-hidden="true"></canvas>
+
+  <!-- ==================== MENSAGEM DE FEEDBACK ==================== -->
+  <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+
+  <script src="js/voz.js"></script>
+  <script src="js/confete.js"></script>
+  <script src="js/microfone.js"></script>
+  <script src="js/fases.js"></script>
+  <script src="js/fase1.js"></script>
+  <script src="js/painel.js"></script>
+  <script src="js/temas.js"></script>
+  <script src="js/cacada.js"></script>
+  <script src="js/jogo.js"></script>
+</body>
+</html>

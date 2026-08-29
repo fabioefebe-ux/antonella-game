@@ -1,0 +1,1241 @@
+/* ========================================================================
+   MUNDO MÁGICO DA ANTONELLA — Estilos lúdicos
+   Foco: cores vivas, botões gigantes arredondados, tipografia grande em
+   letras bastão (maiúsculas) e bem espaçadas para uma criança de 6 anos.
+   ======================================================================== */
+
+:root {
+  --cor-fundo-1: #ffd6ec;   /* rosa claro */
+  --cor-fundo-2: #c9e7ff;   /* azul claro */
+  --cor-rosa: #ff5fa2;
+  --cor-roxo: #8a5cff;
+  --cor-amarelo: #ffcb2b;
+  --cor-verde: #38d39f;
+  --cor-laranja: #ff8a3d;
+  --cor-texto: #4a2c6f;
+  --sombra-botao: 0 8px 0 rgba(0, 0, 0, 0.15);
+  --raio: 32px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Fredoka", "Comic Sans MS", "Trebuchet MS", sans-serif;
+  color: var(--cor-texto);
+  background: linear-gradient(160deg, var(--cor-fundo-1), var(--cor-fundo-2));
+  background-attachment: fixed;
+  overflow: hidden;
+  text-transform: uppercase;      /* tudo em LETRAS BASTÃO */
+  letter-spacing: 0.06em;         /* bem espaçado */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---------------- Telas ---------------- */
+.tela {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 24px;
+  text-align: center;
+}
+
+.tela--ativa {
+  display: flex;
+  animation: aparecer 0.5s ease;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ---------------- Título ---------------- */
+.titulo-jogo {
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 4px 0 var(--cor-rosa), 0 8px 12px rgba(0, 0, 0, 0.2);
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+.mascote {
+  font-size: clamp(4rem, 18vw, 9rem);
+  animation: flutuar 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.15));
+}
+
+/* ---------------- Botões ---------------- */
+.botao {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: none;
+  border-radius: var(--raio);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--sombra-botao);
+  transition: transform 0.12s ease, filter 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.botao:active {
+  transform: translateY(6px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.botao:focus-visible {
+  outline: 6px solid var(--cor-amarelo);
+  outline-offset: 4px;
+}
+
+.botao--gigante {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 700;
+  padding: 28px 64px;
+}
+
+.botao--jogar {
+  background: linear-gradient(180deg, #ff7ab6, var(--cor-rosa));
+  animation: pulsar 1.6s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+.botao__icone {
+  font-size: 1.2em;
+}
+
+.botao--audio {
+  background: linear-gradient(180deg, #ffd95e, var(--cor-amarelo));
+  color: var(--cor-texto);
+  font-size: 2.4rem;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.botao--audio-grande {
+  width: auto;
+  border-radius: var(--raio);
+  padding: 18px 34px;
+  font-size: 1.6rem;
+  flex-direction: row;
+}
+
+.botao__texto-pequeno {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.botao--voltar {
+  background: linear-gradient(180deg, #a985ff, var(--cor-roxo));
+  font-size: 2rem;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+/* ---------------- Estrelas de fundo ---------------- */
+.estrelas-fundo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.estrela {
+  position: absolute;
+  font-size: 2.5rem;
+  opacity: 0.8;
+  animation: girar 6s linear infinite;
+}
+
+.estrela:nth-child(1) { top: 12%; left: 10%; animation-duration: 7s; }
+.estrela:nth-child(2) { top: 22%; right: 12%; animation-duration: 5s; }
+.estrela:nth-child(3) { bottom: 18%; left: 16%; animation-duration: 8s; }
+.estrela:nth-child(4) { bottom: 12%; right: 18%; animation-duration: 6s; }
+.estrela:nth-child(5) { top: 45%; left: 48%; animation-duration: 9s; }
+
+@keyframes girar {
+  from { transform: rotate(0) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.2); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+/* ---------------- Tela do jogo ---------------- */
+.jogo-topo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.placar-estrelas {
+  font-size: 2.4rem;
+  min-height: 2.6rem;
+  letter-spacing: 0.1em;
+}
+
+.atividade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.atividade__pergunta {
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.figura-atividade {
+  font-size: clamp(6rem, 22vw, 11rem);
+  background: #fff;
+  border-radius: 40px;
+  padding: 20px 40px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+/* ---------------- Opções de resposta ---------------- */
+.opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 900px;
+}
+
+.opcao {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: var(--raio);
+  padding: 26px 44px;
+  min-width: 180px;
+  cursor: pointer;
+  box-shadow: var(--sombra-botao);
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.opcao:nth-child(4n + 1) { background: linear-gradient(180deg, #ff7ab6, var(--cor-rosa)); }
+.opcao:nth-child(4n + 2) { background: linear-gradient(180deg, #6fe0bd, var(--cor-verde)); }
+.opcao:nth-child(4n + 3) { background: linear-gradient(180deg, #a985ff, var(--cor-roxo)); }
+.opcao:nth-child(4n + 4) { background: linear-gradient(180deg, #ffa967, var(--cor-laranja)); }
+
+.opcao:active { transform: translateY(6px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15); }
+.opcao:focus-visible { outline: 6px solid var(--cor-amarelo); outline-offset: 4px; }
+
+.opcao--erro {
+  animation: tremer 0.5s ease;
+}
+
+@keyframes tremer {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-12px); }
+  40%      { transform: translateX(12px); }
+  60%      { transform: translateX(-8px); }
+  80%      { transform: translateX(8px); }
+}
+
+.opcao--acerto {
+  animation: crescer-feliz 0.6s ease;
+}
+
+@keyframes crescer-feliz {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1.1); }
+}
+
+/* ---------------- Fase 1: história interativa ---------------- */
+.tela--fase {
+  justify-content: flex-start;
+  padding-top: 96px;
+  gap: 18px;
+}
+
+.fase-progresso {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--cor-roxo);
+  padding: 8px 20px;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
+}
+
+.cena {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 100%;
+  max-width: 960px;
+}
+
+.cena__historia {
+  background: #fff;
+  border-radius: 32px;
+  padding: 24px 28px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.cena__texto {
+  font-size: clamp(1.3rem, 3.6vw, 2rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--cor-texto);
+  text-align: center;
+}
+
+.cena__desafio {
+  font-size: clamp(1.4rem, 4.2vw, 2.2rem);
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(180deg, #ff7ab6, var(--cor-rosa));
+  padding: 16px 28px;
+  border-radius: 24px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+/* ---------------- Cards ilustrados ---------------- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  justify-content: center;
+  width: 100%;
+}
+
+.card {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: #fff;
+  border: 6px solid transparent;
+  border-radius: 28px;
+  padding: 18px 20px 14px;
+  width: clamp(140px, 26vw, 200px);
+  cursor: pointer;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-6px);
+  border-color: var(--cor-amarelo);
+  outline: none;
+}
+
+.card:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+.card__figura {
+  font-size: clamp(3.4rem, 12vw, 6rem);
+  line-height: 1;
+  filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.12));
+}
+
+.card__nome {
+  font-size: clamp(1.2rem, 3.4vw, 1.8rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.card--acerto {
+  border-color: var(--cor-verde);
+  animation: crescer-feliz 0.6s ease;
+}
+
+.card--erro {
+  border-color: var(--cor-amarelo);
+  animation: tremer 0.5s ease;
+}
+
+/* ---------------- Botão Caçada dos Sons (menu) ---------------- */
+.botao--cacada {
+  background: linear-gradient(180deg, #6fe0bd, var(--cor-verde));
+  font-size: clamp(1.3rem, 4.5vw, 2.2rem);
+  padding: 22px 44px;
+}
+
+/* ==================== A CAÇADA DOS SONS ==================== */
+
+/* ---------------- Painel de rotina visual (TEACCH) ---------------- */
+.rotina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  max-width: 960px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 28px;
+  padding: 14px 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.rotina__passo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 4px solid transparent;
+  background: #fff;
+  min-width: 96px;
+  opacity: 0.55;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.rotina__icone {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  line-height: 1;
+}
+
+.rotina__texto {
+  font-size: clamp(0.8rem, 2.2vw, 1.1rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.rotina__seta {
+  font-size: 1.6rem;
+  color: var(--cor-roxo);
+}
+
+/* Passo atual: brilho/destaque verde */
+.rotina__passo--ativo {
+  opacity: 1;
+  border-color: var(--cor-verde);
+  transform: scale(1.08);
+  box-shadow: 0 0 0 6px rgba(56, 211, 159, 0.25), 0 8px 16px rgba(0, 0, 0, 0.15);
+  animation: brilho-verde 1.4s ease-in-out infinite;
+}
+
+/* Passos já concluídos: verdes, sem animar */
+.rotina__passo--feito {
+  opacity: 1;
+  border-color: var(--cor-verde);
+  background: #e6fbf3;
+}
+
+@keyframes brilho-verde {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(56, 211, 159, 0.25), 0 8px 16px rgba(0, 0, 0, 0.15); }
+  50%      { box-shadow: 0 0 0 12px rgba(56, 211, 159, 0.15), 0 8px 16px rgba(0, 0, 0, 0.15); }
+}
+
+/* ---------------- Seletor de temas ---------------- */
+.temas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.temas__titulo {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 4px 0 var(--cor-roxo), 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.temas__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  justify-content: center;
+}
+
+.tema {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: #fff;
+  border: 6px solid transparent;
+  border-radius: 28px;
+  padding: 20px 22px;
+  width: clamp(150px, 30vw, 200px);
+  cursor: pointer;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.tema:hover,
+.tema:focus-visible {
+  transform: translateY(-6px);
+  border-color: var(--cor-amarelo);
+  outline: none;
+}
+
+.tema:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* ---------------- Cenário do tema ---------------- */
+.cenario {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border-radius: 32px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.cenario__fundo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 32px;
+  opacity: 0.9;
+}
+
+/* Fundos por tema (gradientes suaves + emoji decorativo) */
+.cenario--dinos .cenario__fundo   { background: linear-gradient(160deg, #b9f6c5, #7bd88f); }
+.cenario--carros .cenario__fundo  { background: linear-gradient(160deg, #cfe4ff, #8ab6f0); }
+.cenario--animais .cenario__fundo { background: linear-gradient(160deg, #ffe6b3, #ffca6b); }
+/* Fundo padrão para fases novas (chaves sem estilo próprio) */
+.cenario--tema .cenario__fundo    { background: linear-gradient(160deg, #ffe0f0, #d9c9ff); }
+
+/* ---------------- Cartões de comando PECS ---------------- */
+.pecs {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.pecs__btn {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: none;
+  border-radius: 24px;
+  padding: 16px 26px;
+  min-width: 120px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--sombra-botao);
+  transition: transform 0.12s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pecs__btn:nth-child(1) { background: linear-gradient(180deg, #a985ff, var(--cor-roxo)); }
+.pecs__btn:nth-child(2) { background: linear-gradient(180deg, #ffd95e, var(--cor-amarelo)); color: var(--cor-texto); }
+.pecs__btn:nth-child(3) { background: linear-gradient(180deg, #ff9a5b, var(--cor-laranja)); }
+
+.pecs__btn:hover,
+.pecs__btn:focus-visible { transform: translateY(-5px); outline: none; }
+.pecs__btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15); }
+.pecs__btn:focus-visible { outline: 6px solid var(--cor-amarelo); outline-offset: 3px; }
+
+.pecs__icone { font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; }
+.pecs__texto { font-size: clamp(1rem, 3vw, 1.4rem); font-weight: 700; }
+
+/* ---------------- Alvo fônico (instrução fônica explícita) ---------------- */
+.alvo-fonico {
+  position: relative;
+  border: none;
+  background: #fff;
+  border-radius: 36px;
+  padding: 20px 40px;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.alvo-fonico__fig {
+  font-size: clamp(5rem, 20vw, 9rem);
+  line-height: 1;
+}
+
+/* "Boca" que pulsa enquanto o fonema é falado */
+.boca-som {
+  width: 46px;
+  height: 22px;
+  border-radius: 0 0 40px 40px;
+  background: var(--cor-rosa);
+  transition: transform 0.15s ease;
+}
+
+.alvo-fonico--vibrando {
+  animation: vibrar-som 0.35s linear infinite;
+}
+
+.alvo-fonico--vibrando .boca-som {
+  animation: boca-pulsa 0.35s ease-in-out infinite;
+}
+
+@keyframes vibrar-som {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px) rotate(-1deg); }
+  75%      { transform: translateX(4px) rotate(1deg); }
+}
+
+@keyframes boca-pulsa {
+  0%, 100% { transform: scaleY(0.5); }
+  50%      { transform: scaleY(1.6); }
+}
+
+/* ---------------- Palavra com letras (lacunas grandes) ---------------- */
+.letras-palavra {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.lacuna-letra {
+  width: clamp(60px, 15vw, 96px);
+  height: clamp(72px, 18vw, 112px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 700;
+  color: var(--cor-roxo);
+  background: #fff;
+  border: 5px dashed var(--cor-roxo);
+  border-radius: 20px;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.lacuna-letra--fixa {
+  border-style: solid;
+  border-color: #d9c9f5;
+  color: var(--cor-texto);
+  background: #f5efff;
+}
+
+.lacuna-letra--sobre {
+  background: #fff6c9;
+  border-color: var(--cor-amarelo);
+  transform: scale(1.08);
+}
+
+.lacuna-letra--preenchida {
+  border-style: solid;
+  border-color: var(--cor-verde);
+  color: var(--cor-verde);
+  background: #e6fbf3;
+  animation: crescer-feliz 0.6s ease;
+}
+
+/* Casinha que deve ser preenchida agora (guia visual da ordem) */
+.lacuna-letra--alvo {
+  border-color: var(--cor-rosa);
+  box-shadow: 0 0 0 5px rgba(255, 95, 162, 0.2);
+  animation: brilho-alvo 1.2s ease-in-out infinite;
+}
+
+@keyframes brilho-alvo {
+  0%, 100% { box-shadow: 0 0 0 5px rgba(255, 95, 162, 0.2); }
+  50%      { box-shadow: 0 0 0 10px rgba(255, 95, 162, 0.1); }
+}
+
+/* ---------------- Medidor de progresso (TEACCH) ---------------- */
+.medidor-teacch {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  padding: 8px 22px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.medidor-teacch__texto {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.medidor-teacch__estrelas {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  letter-spacing: 0.1em;
+}
+
+/* ---------------- Letras móveis (blocos arrastáveis) ---------------- */
+.letras-moveis {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.letra-movel {
+  width: clamp(64px, 16vw, 96px);
+  height: clamp(64px, 16vw, 96px);
+  font-family: inherit;
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  cursor: grab;
+  box-shadow: var(--sombra-botao);
+  transition: transform 0.12s ease;
+  touch-action: none;
+}
+
+.letra-movel:nth-child(3n + 1) { background: linear-gradient(180deg, #ff7ab6, var(--cor-rosa)); }
+.letra-movel:nth-child(3n + 2) { background: linear-gradient(180deg, #6fe0bd, var(--cor-verde)); }
+.letra-movel:nth-child(3n + 3) { background: linear-gradient(180deg, #a985ff, var(--cor-roxo)); }
+
+.letra-movel:hover,
+.letra-movel:focus-visible { transform: translateY(-6px); outline: none; }
+.letra-movel:active { cursor: grabbing; }
+.letra-movel--arrastando { opacity: 0.5; transform: scale(1.1); }
+.letra-movel--soando { animation: crescer-feliz 0.5s ease; }
+.letra-movel--usada { opacity: 0.35; filter: grayscale(0.6); pointer-events: none; }
+.letra-movel--erro { animation: tremer 0.5s ease; }
+
+/* ---------------- Minijogo reforçador (15s) ---------------- */
+.palco--minijogo { width: 100%; }
+
+.minijogo__painel {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  font-size: clamp(1.3rem, 4vw, 1.9rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.minijogo__relogio,
+.minijogo__pontos {
+  background: #fff;
+  padding: 8px 18px;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.minijogo__arena {
+  position: relative;
+  width: min(90vw, 760px);
+  height: min(48vh, 380px);
+  margin: 14px auto 0;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.minijogo__alvo {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  font-size: clamp(4rem, 16vw, 7rem);
+  animation: flutuar 2.4s ease-in-out infinite;
+}
+
+.minijogo__alvo--feliz { animation: crescer-feliz 0.25s ease; }
+
+.minijogo__comida {
+  position: absolute;
+  font-size: clamp(2.4rem, 9vw, 3.6rem);
+  background: none;
+  border: none;
+  cursor: pointer;
+  animation: pulsar 1.2s ease-in-out infinite;
+}
+
+.minijogo__comida:active { transform: scale(0.85); }
+
+/* ---------------- Tela de seleção de fases ---------------- */
+.titulo-fases {
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 4px 0 var(--cor-roxo), 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.lista-fases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  max-width: 960px;
+}
+
+.card--fase {
+  position: relative;
+  width: clamp(150px, 40vw, 210px);
+}
+
+.card--fase__num {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffd95e, var(--cor-amarelo));
+  color: var(--cor-texto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* ---------------- Palco (arraste / microfone) ---------------- */
+.palco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 100%;
+}
+
+.palco__figura {
+  font-size: clamp(4.5rem, 18vw, 8rem);
+  background: #fff;
+  border-radius: 36px;
+  padding: 14px 30px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  animation: flutuar 3s ease-in-out infinite;
+}
+
+.palco__figura--grande {
+  font-size: clamp(5.5rem, 22vw, 10rem);
+}
+
+.historia-balao {
+  background: #fff;
+  border-radius: 28px;
+  padding: 22px 28px;
+  max-width: 720px;
+  font-size: clamp(1.2rem, 3.4vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--cor-texto);
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.palco__dica {
+  font-size: clamp(1.1rem, 3.4vw, 1.6rem);
+  font-weight: 600;
+  color: var(--cor-texto);
+  min-height: 1.6em;
+  text-align: center;
+}
+
+/* ---------------- Arraste e solte: palavra com lacuna ---------------- */
+.palavra-montar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.palavra-montar__fixo {
+  letter-spacing: 0.08em;
+}
+
+.lacuna {
+  min-width: clamp(80px, 20vw, 140px);
+  min-height: clamp(70px, 16vw, 110px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px dashed var(--cor-roxo);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--cor-roxo);
+  padding: 0 12px;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.lacuna--sobre {
+  background: #fff6c9;
+  border-color: var(--cor-amarelo);
+  transform: scale(1.08);
+}
+
+.lacuna--preenchida {
+  border-style: solid;
+  border-color: var(--cor-verde);
+  color: var(--cor-verde);
+  animation: crescer-feliz 0.6s ease;
+}
+
+/* ---------------- Balões de sílabas ---------------- */
+.baloes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+}
+
+.balao {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 20px 34px;
+  cursor: grab;
+  box-shadow: var(--sombra-botao);
+  transition: transform 0.12s ease, filter 0.12s ease;
+  touch-action: none; /* permite arrastar com o dedo sem rolar a tela */
+}
+
+.balao:nth-child(3n + 1) { background: linear-gradient(180deg, #ff7ab6, var(--cor-rosa)); }
+.balao:nth-child(3n + 2) { background: linear-gradient(180deg, #6fe0bd, var(--cor-verde)); }
+.balao:nth-child(3n + 3) { background: linear-gradient(180deg, #a985ff, var(--cor-roxo)); }
+
+.balao:hover,
+.balao:focus-visible { transform: translateY(-6px); outline: none; }
+.balao:active { cursor: grabbing; }
+
+.balao--arrastando { opacity: 0.5; transform: scale(1.1); }
+
+.balao--fantasma {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.9;
+  z-index: 70;
+  margin: 0;
+}
+
+.balao--usado { opacity: 0.35; filter: grayscale(0.6); pointer-events: none; }
+.balao--erro { animation: tremer 0.5s ease; }
+
+/* ---------------- Botão de microfone ---------------- */
+.botao--microfone {
+  background: linear-gradient(180deg, #ff9a5b, var(--cor-laranja));
+  font-size: 2.4rem;
+  padding: 22px 40px;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.botao--microfone .botao__texto-pequeno {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.botao--ouvindo {
+  animation: pulsar-mic 1s ease-in-out infinite;
+  background: linear-gradient(180deg, #ff6b6b, #e63946);
+}
+
+@keyframes pulsar-mic {
+  0%, 100% { transform: scale(1); box-shadow: var(--sombra-botao); }
+  50%      { transform: scale(1.1); box-shadow: 0 0 0 12px rgba(230, 57, 70, 0.25), var(--sombra-botao); }
+}
+
+/* ---------------- Confetes ---------------- */
+.canvas-confete {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ---------------- Feedback (banner) ---------------- */
+.feedback {
+  position: fixed;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%) translateY(140%);
+  background: #fff;
+  color: var(--cor-texto);
+  font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+  font-weight: 700;
+  padding: 22px 40px;
+  border-radius: var(--raio);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  z-index: 60;
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.feedback--visivel {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.feedback--acerto { border: 6px solid var(--cor-verde); }
+.feedback--erro   { border: 6px solid var(--cor-amarelo); }
+
+/* ---------------- Acessibilidade: reduzir movimento ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ======================================================================
+   PAINEL DO EDUCADOR — engrenagem discreta + modal + tabela
+   ====================================================================== */
+
+/* Botão de acesso oculto: pequeno e translúcido, no canto superior direito */
+.painel-engrenagem {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.35);
+  color: #4a2c6f;
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 200;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.painel-engrenagem:hover,
+.painel-engrenagem:focus-visible {
+  opacity: 0.9;
+  outline: none;
+}
+
+/* Enquanto segura (3s), enche uma "argola" verde ao redor */
+.painel-engrenagem--segurando {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px rgba(56, 211, 159, 0.6);
+  animation: painel-segurar 3s linear forwards;
+}
+
+@keyframes painel-segurar {
+  from { box-shadow: 0 0 0 3px rgba(56, 211, 159, 0.3); }
+  to   { box-shadow: 0 0 0 10px rgba(56, 211, 159, 0.8); }
+}
+
+/* ---------------- Modal ---------------- */
+.painel-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(40, 20, 60, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  /* fonte legível para adulto: sem caixa alta, sem espaçamento exagerado */
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.painel-modal[hidden] { display: none; }
+
+.painel-caixa {
+  background: #fff;
+  border-radius: 20px;
+  width: min(860px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  color: #333;
+}
+
+.painel-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  background: linear-gradient(180deg, #8a5cff, #6f3fe0);
+  color: #fff;
+  position: sticky;
+  top: 0;
+}
+
+.painel-titulo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.painel-fechar {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.painel-fechar:hover { background: rgba(255, 255, 255, 0.35); }
+
+.painel-corpo {
+  padding: 18px 22px;
+}
+
+.painel-vazio {
+  color: #777;
+  font-size: 1rem;
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.painel-sessao {
+  margin-bottom: 22px;
+}
+
+.painel-sessao__cab {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.painel-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.painel-tabela th,
+.painel-tabela td {
+  border: 1px solid #e4e4ef;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.painel-tabela th {
+  background: #f2eefb;
+  color: #4a2c6f;
+  font-weight: 700;
+}
+
+.painel-tabela td:first-child {
+  font-weight: 700;
+  color: #4a2c6f;
+}
+
+.painel-tabela tr:nth-child(even) td {
+  background: #faf8ff;
+}
+
+/* ---------------- Ações / exportação ---------------- */
+.painel-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 22px 12px;
+}
+
+.painel-btn {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: #38d39f;
+  color: #fff;
+  transition: filter 0.15s ease;
+}
+
+.painel-btn:hover { filter: brightness(1.05); }
+
+.painel-btn--limpar {
+  background: #f0f0f4;
+  color: #b03a3a;
+  margin-left: auto;
+}
+
+.painel-status {
+  min-height: 1.2em;
+  padding: 0 22px 18px;
+  margin: 0;
+  color: #2a9d6f;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
