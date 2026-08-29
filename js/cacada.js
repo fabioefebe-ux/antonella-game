@@ -113,7 +113,7 @@ if (typeof window !== "undefined" && typeof window.TEMAS === "undefined") {
 
 const Cacada = (function () {
   const NOME = "Antonella";
-  const RATE = 0.8;
+  const RATE = 0.9; // um pouco mais calma que o padrão (por causa dos fonemas), sem soar arrastada
 
   let el = {};
   let aoConcluir = null;
@@ -941,7 +941,7 @@ const Cacada = (function () {
   function encerrar() {
     registro("encerrarSessao");
     if (typeof Microfone !== "undefined" && Microfone.parar) Microfone.parar();
-    Voz.definirRatePadrao(0.85);
+    Voz.definirRatePadrao(0.95);
     Voz.parar();
   }
 
