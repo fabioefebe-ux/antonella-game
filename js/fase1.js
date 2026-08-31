@@ -88,6 +88,11 @@ const Fase1 = (function () {
     const tipo = cenaAtual.tipo || "fonico";
     if (tipo === "arrasta") renderizarArrasta();
     else if (tipo === "microfone") renderizarMicrofone();
+    else if (tipo === "contar") renderizarContar();
+    else if (tipo === "parear") renderizarParear();
+    else if (tipo === "sinonimo") renderizarSinonimo();
+    else if (tipo === "tamanho") renderizarTamanho();
+    else if (tipo === "separar") renderizarSeparar();
     else renderizarFonico();
   }
 
@@ -457,6 +462,373 @@ const Fase1 = (function () {
       aoTerminar: function () {
         btnMic.classList.remove("botao--ouvindo");
       },
+    });
+  }
+
+  // ========== TIPO 4: CONTAR SÍLABAS ==========
+  // A cena traz: figura, palavra e silabas[] (ex.: ["CE","BO","LA"]). A criança
+  // ouve a palavra batida em sílabas e escolhe QUANTAS são, tocando no número.
+  function renderizarContar() {
+    el.desafio.textContent = "QUANTAS SÍLABAS TEM ESTA PALAVRA? 👏";
+
+    const silabas = cenaAtual.silabas || [];
+    const total = silabas.length;
+
+    // Figura grande do que a palavra representa.
+    const fig = document.createElement("div");
+    fig.className = "palco__figura palco__figura--grande";
+    fig.setAttribute("aria-hidden", "true");
+    fig.textContent = cenaAtual.figura;
+    el.palco.appendChild(fig);
+
+    // A palavra com as sílabas separadas por tracinho (apoio visual).
+    const palavra = document.createElement("div");
+    palavra.className = "silabas-palavra";
+    silabas.forEach(function (s, i) {
+      const bloco = document.createElement("span");
+      bloco.className = "silabas-palavra__silaba";
+      bloco.textContent = s;
+      palavra.appendChild(bloco);
+      if (i < total - 1) {
+        const traco = document.createElement("span");
+        traco.className = "silabas-palavra__traco";
+        traco.setAttribute("aria-hidden", "true");
+        traco.textContent = "-";
+        palavra.appendChild(traco);
+      }
+    });
+    el.palco.appendChild(palavra);
+
+    // Botão para ouvir a palavra "batida" sílaba por sílaba (consciência
+    // silábica: cada sílaba é falada com uma pausa, como uma palma).
+    const btnOuvir = document.createElement("button");
+    btnOuvir.className = "botao botao--audio botao--audio-grande";
+    btnOuvir.innerHTML =
+      '<span aria-hidden="true">👏</span><span class="botao__texto-pequeno">OUVIR AS SÍLABAS</span>';
+    btnOuvir.setAttribute("aria-label", "Ouvir a palavra em sílabas");
+    function baterSilabas() {
+      // Anima cada bloco de sílaba enquanto fala, uma de cada vez.
+      const blocos = palavra.querySelectorAll(".silabas-palavra__silaba");
+      let i = 0;
+      (function proxima() {
+        if (i >= silabas.length) return;
+        const b = blocos[i];
+        if (b) b.classList.add("silabas-palavra__silaba--ativa");
+        Voz.falar(silabas[i], {
+          aoTerminar: function () {
+            if (b) b.classList.remove("silabas-palavra__silaba--ativa");
+            i++;
+            setTimeout(proxima, 150);
+          },
+        });
+      })();
+    }
+    btnOuvir.onclick = baterSilabas;
+    el.palco.appendChild(btnOuvir);
+
+    // Cards de números para escolher. Mostra de 1 até o maior número entre as
+    // opções desta cena (ou até o total + 1, garantindo alternativas).
+    const numeros = cenaAtual.numeros || [1, 2, 3, 4];
+    const linhaNums = document.createElement("div");
+    linhaNums.className = "numeros-silabas";
+    embaralhar(numeros).forEach(function (n) {
+      const btn = document.createElement("button");
+      btn.className = "card card--numero";
+      btn.setAttribute("aria-label", n + (n === 1 ? " sílaba" : " sílabas"));
+      btn.textContent = String(n);
+      btn.onclick = function () {
+        if (bloqueado) return;
+        if (n === total) {
+          btn.classList.add("card--acerto");
+          comemorarEAvancar();
+        } else {
+          btn.classList.add("card--erro");
+          setTimeout(function () {
+            btn.classList.remove("card--erro");
+          }, 500);
+          incentivarErro();
+        }
+      };
+      linhaNums.appendChild(btn);
+    });
+    el.palco.appendChild(linhaNums);
+
+    // Narra a história e, ao terminar, bate as sílabas automaticamente.
+    narrarHistoria(function () {
+      Voz.falar("Vamos contar as sílabas de " + cenaAtual.palavra + ".", {
+        aoTerminar: baterSilabas,
+      });
+    });
+  }
+
+  // ========== TIPO 5: PAREAR (mesma palavra em MAIÚSCULA e minúscula) ==========
+  // A cena traz: alvo (palavra em MAIÚSCULA) e opcoes[] (a mesma palavra e
+  // outras, TODAS em minúscula). A criança acha a versão minúscula que é a
+  // mesma palavra do alvo. Ensina que a palavra é a mesma em tipos de letra
+  // diferentes. A comparação ignora maiúsculas/acentos (tolerante).
+  function renderizarParear() {
+    el.desafio.textContent = "ACHE A MESMA PALAVRA EM LETRA PEQUENA 👇";
+
+    // Palavra-alvo em MAIÚSCULA, bem grande e em destaque.
+    if (cenaAtual.figura) {
+      const fig = document.createElement("div");
+      fig.className = "palco__figura";
+      fig.setAttribute("aria-hidden", "true");
+      fig.textContent = cenaAtual.figura;
+      el.palco.appendChild(fig);
+    }
+
+    const alvo = document.createElement("div");
+    alvo.className = "parear-alvo";
+    alvo.textContent = cenaAtual.alvo;
+    el.palco.appendChild(alvo);
+
+    // Compara ignorando caixa e acentos (ex.: "SORVETE" casa com "sorvete").
+    function mesma(a, b) {
+      const norm = function (s) {
+        return (s || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+      };
+      return norm(a) === norm(b);
+    }
+
+    // Cards com as opções em minúscula.
+    const linha = document.createElement("div");
+    linha.className = "cards";
+    embaralhar(cenaAtual.opcoes).forEach(function (palavra) {
+      const btn = document.createElement("button");
+      btn.className = "card card--palavra-min";
+      btn.setAttribute("aria-label", palavra);
+      btn.textContent = palavra; // fica em minúscula via CSS (text-transform)
+
+      // Fala a palavra ao passar o mouse / focar.
+      function falar() {
+        if (!bloqueado) Voz.falar(palavra);
+      }
+      btn.addEventListener("mouseenter", falar);
+      btn.addEventListener("focus", falar);
+
+      btn.onclick = function () {
+        if (bloqueado) return;
+        if (mesma(palavra, cenaAtual.alvo)) {
+          btn.classList.add("card--acerto");
+          comemorarEAvancar();
+        } else {
+          btn.classList.add("card--erro");
+          setTimeout(function () {
+            btn.classList.remove("card--erro");
+          }, 500);
+          incentivarErro();
+        }
+      };
+      linha.appendChild(btn);
+    });
+    el.palco.appendChild(linha);
+
+    narrarHistoria(function () {
+      Voz.falar(
+        "Ache a palavra " + cenaAtual.alvo + " escrita com letra pequena, " + NOME + "."
+      );
+    });
+  }
+
+  // ========== TIPO 6: SINÔNIMO (palavra que significa o mesmo) ==========
+  // A cena traz: palavra (referência) e opcoes[] com { texto, certa }. A
+  // criança acha a palavra que quer dizer a MESMA coisa. Vocabulário simples
+  // e concreto. A opção correta é marcada com certa:true (não é comparada por
+  // texto, pois o sinônimo é uma palavra DIFERENTE).
+  function renderizarSinonimo() {
+    el.desafio.textContent = "ACHE A PALAVRA QUE QUER DIZER O MESMO 💬";
+
+    if (cenaAtual.emoji) {
+      const fig = document.createElement("div");
+      fig.className = "palco__figura";
+      fig.setAttribute("aria-hidden", "true");
+      fig.textContent = cenaAtual.emoji;
+      el.palco.appendChild(fig);
+    }
+
+    // Palavra de referência em destaque.
+    const alvo = document.createElement("div");
+    alvo.className = "parear-alvo";
+    alvo.textContent = cenaAtual.palavra;
+    el.palco.appendChild(alvo);
+
+    // Cards com as opções de sinônimo.
+    const linha = document.createElement("div");
+    linha.className = "cards";
+    embaralhar(cenaAtual.opcoes).forEach(function (op) {
+      const btn = document.createElement("button");
+      btn.className = "card card--palavra";
+      btn.setAttribute("aria-label", op.texto);
+
+      const nome = document.createElement("span");
+      nome.className = "card__nome";
+      nome.textContent = op.texto;
+      btn.appendChild(nome);
+
+      function falar() {
+        if (!bloqueado) Voz.falar(op.texto);
+      }
+      btn.addEventListener("mouseenter", falar);
+      btn.addEventListener("focus", falar);
+
+      btn.onclick = function () {
+        if (bloqueado) return;
+        if (op.certa) {
+          btn.classList.add("card--acerto");
+          comemorarEAvancar();
+        } else {
+          btn.classList.add("card--erro");
+          setTimeout(function () {
+            btn.classList.remove("card--erro");
+          }, 500);
+          incentivarErro();
+        }
+      };
+      linha.appendChild(btn);
+    });
+    el.palco.appendChild(linha);
+
+    narrarHistoria(function () {
+      Voz.falar(
+        "Ache a palavra que quer dizer o mesmo que " + cenaAtual.palavra + ", " + NOME + "."
+      );
+    });
+  }
+
+  // ========== TIPO 7: TAMANHO (achar a palavra GRANDE ou pequena) ==========
+  // A cena traz: palavra e alvo ("grande" ou "pequeno"). O motor mostra a
+  // MESMA palavra em dois tamanhos e a criança acha a do tamanho pedido.
+  // Trabalha a percepção visual do texto (destaque/tamanho da letra).
+  function renderizarTamanho() {
+    const querGrande = (cenaAtual.alvo || "grande").toLowerCase() === "grande";
+    el.desafio.textContent = querGrande
+      ? "ACHE A PALAVRA GRANDE 🔎"
+      : "ACHE A PALAVRA PEQUENA 🔎";
+
+    if (cenaAtual.emoji) {
+      const fig = document.createElement("div");
+      fig.className = "palco__figura";
+      fig.setAttribute("aria-hidden", "true");
+      fig.textContent = cenaAtual.emoji;
+      el.palco.appendChild(fig);
+    }
+
+    // Dois cards com a MESMA palavra: um grande, um pequeno.
+    const linha = document.createElement("div");
+    linha.className = "cards";
+
+    // certoGrande = true => o card grande é o correto.
+    const dados = [
+      { grande: true },
+      { grande: false },
+    ];
+    embaralhar(dados).forEach(function (d) {
+      const btn = document.createElement("button");
+      btn.className =
+        "card card--tamanho " +
+        (d.grande ? "card--texto-grande" : "card--texto-pequeno");
+      btn.setAttribute(
+        "aria-label",
+        cenaAtual.palavra + (d.grande ? " grande" : " pequena")
+      );
+      btn.textContent = cenaAtual.palavra;
+
+      btn.onclick = function () {
+        if (bloqueado) return;
+        if (d.grande === querGrande) {
+          btn.classList.add("card--acerto");
+          comemorarEAvancar();
+        } else {
+          btn.classList.add("card--erro");
+          setTimeout(function () {
+            btn.classList.remove("card--erro");
+          }, 500);
+          incentivarErro();
+        }
+      };
+      linha.appendChild(btn);
+    });
+    el.palco.appendChild(linha);
+
+    narrarHistoria(function () {
+      Voz.falar(
+        "Ache a palavra " +
+          cenaAtual.palavra +
+          " escrita " +
+          (querGrande ? "bem grande" : "pequenininha") +
+          ", " +
+          NOME +
+          "."
+      );
+    });
+  }
+
+  // ========== TIPO 8: SEPARAR (achar o espaço entre palavras) ==========
+  // A cena traz: grudada (duas palavras coladas, ex.: "OGATO") e opcoes[] com
+  // { texto, certa } mostrando separações possíveis ("O GATO", "OG ATO"...).
+  // A criança acha onde fica o espaço. Trabalha o espaçamento entre palavras.
+  function renderizarSeparar() {
+    el.desafio.textContent = "ACHE ONDE FICA O ESPAÇO ENTRE AS PALAVRAS ✂️";
+
+    if (cenaAtual.emoji) {
+      const fig = document.createElement("div");
+      fig.className = "palco__figura";
+      fig.setAttribute("aria-hidden", "true");
+      fig.textContent = cenaAtual.emoji;
+      el.palco.appendChild(fig);
+    }
+
+    // Palavras grudadas em destaque (sem espaço).
+    const grudada = document.createElement("div");
+    grudada.className = "parear-alvo";
+    grudada.textContent = cenaAtual.grudada;
+    el.palco.appendChild(grudada);
+
+    // Cards com as opções de separação.
+    const linha = document.createElement("div");
+    linha.className = "cards";
+    embaralhar(cenaAtual.opcoes).forEach(function (op) {
+      const btn = document.createElement("button");
+      btn.className = "card card--palavra";
+      btn.setAttribute("aria-label", op.texto);
+
+      const nome = document.createElement("span");
+      nome.className = "card__nome";
+      nome.textContent = op.texto;
+      btn.appendChild(nome);
+
+      function falar() {
+        if (!bloqueado) Voz.falar(op.texto);
+      }
+      btn.addEventListener("mouseenter", falar);
+      btn.addEventListener("focus", falar);
+
+      btn.onclick = function () {
+        if (bloqueado) return;
+        if (op.certa) {
+          btn.classList.add("card--acerto");
+          comemorarEAvancar();
+        } else {
+          btn.classList.add("card--erro");
+          setTimeout(function () {
+            btn.classList.remove("card--erro");
+          }, 500);
+          incentivarErro();
+        }
+      };
+      linha.appendChild(btn);
+    });
+    el.palco.appendChild(linha);
+
+    narrarHistoria(function () {
+      Voz.falar(
+        "Ache onde fica o espaço para separar as palavras, " + NOME + "."
+      );
     });
   }
 

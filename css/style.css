@@ -457,6 +457,106 @@ body {
   animation: tremer 0.5s ease;
 }
 
+/* ---------------- Contar sílabas (tipo "contar") ---------------- */
+/* A palavra com as sílabas separadas por tracinho. */
+.silabas-palavra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+  margin: 6px 0;
+}
+
+.silabas-palavra__silaba {
+  background: #fff;
+  border-radius: 16px;
+  padding: 6px 16px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+/* Realce da sílaba enquanto é falada (a "palma"). */
+.silabas-palavra__silaba--ativa {
+  background: var(--cor-amarelo);
+  transform: translateY(-8px) scale(1.1);
+}
+
+.silabas-palavra__traco {
+  color: var(--cor-rosa);
+  font-weight: 700;
+}
+
+/* Linha de números para escolher a quantidade de sílabas. */
+.numeros-silabas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Cards de número: menores e redondos, reaproveitando a base .card. */
+.card--numero {
+  width: clamp(72px, 18vw, 100px);
+  min-height: clamp(72px, 18vw, 100px);
+  padding: 0;
+  justify-content: center;
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 700;
+  color: var(--cor-roxo, var(--cor-texto));
+}
+
+/* ---------------- Parear MAIÚSCULA x minúscula (tipo "parear") ------------- */
+/* Palavra-alvo em letra GRANDE e MAIÚSCULA, em destaque. */
+.parear-alvo {
+  font-size: clamp(2.2rem, 8vw, 3.6rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+  background: #fff;
+  border-radius: 22px;
+  padding: 12px 28px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.08em;
+  margin: 4px 0 10px;
+}
+
+/* Cards com a palavra em letra PEQUENA (minúscula). O body força maiúsculas,
+   então aqui reforçamos minúsculas para contrastar com o alvo. */
+.card--palavra-min {
+  text-transform: lowercase;
+  font-size: clamp(1.3rem, 4.5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--cor-texto);
+  padding: 18px 22px;
+}
+
+/* Cards de palavra (sinônimos): só texto grande, sem figura. */
+.card--palavra {
+  font-size: clamp(1.3rem, 4.5vw, 2rem);
+  font-weight: 700;
+  padding: 20px 24px;
+  justify-content: center;
+}
+
+/* Cards de TAMANHO: a mesma palavra em dois tamanhos bem diferentes. */
+.card--tamanho {
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  min-height: clamp(90px, 22vw, 130px);
+}
+.card--texto-grande {
+  font-size: clamp(2rem, 8vw, 3.4rem);
+}
+.card--texto-pequeno {
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+}
+
 /* ---------------- Botão Caçada dos Sons (menu) ---------------- */
 .botao--cacada {
   background: linear-gradient(180deg, #6fe0bd, var(--cor-verde));
