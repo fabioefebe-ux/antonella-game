@@ -99,8 +99,15 @@ const Fase1 = (function () {
 
   // ========== TIPO 1: FÔNICO (achar o card) ==========
   function renderizarFonico() {
-    // Cenas de "primeira letra do nome" (Caça às Letras) têm outro enunciado.
-    if (cenaAtual.personagem) {
+    // enunciadoLivre: texto/narração personalizados (ex.: pontuação), quando a
+    // frase padrão "ache o que começa..." não faz sentido. É opcional e não
+    // afeta as cenas antigas.
+    if (cenaAtual.enunciadoLivre) {
+      el.desafio.textContent =
+        cenaAtual.enunciadoLivre.toUpperCase() +
+        (cenaAtual.pista ? " ➔ " + cenaAtual.pista : "");
+    } else if (cenaAtual.personagem) {
+      // Cenas de "primeira letra do nome" (Caça às Letras) têm outro enunciado.
       el.desafio.textContent =
         "ACHE A PRIMEIRA LETRA DE " +
         cenaAtual.enunciado.toUpperCase().replace("O NOME ", "") +
@@ -119,7 +126,9 @@ const Fase1 = (function () {
     });
 
     narrarHistoria(function () {
-      if (cenaAtual.personagem) {
+      if (cenaAtual.narracaoDesafio) {
+        Voz.falar(cenaAtual.narracaoDesafio);
+      } else if (cenaAtual.personagem) {
         Voz.falar(
           "Agora, " + NOME + ", ache a primeira letra " + cenaAtual.enunciado + "."
         );
@@ -379,18 +388,26 @@ const Fase1 = (function () {
     dica.className = "palco__dica";
     el.palco.appendChild(dica);
 
+    // A figura SEMPRE avança ao ser tocada. Isso garante que a criança nunca
+    // fique presa se o microfone falhar (permissão negada, celular sem suporte
+    // estável, etc.) — princípio ABA: sempre há um caminho para o sucesso.
+    fig.style.cursor = "pointer";
+    fig.setAttribute("role", "button");
+    fig.setAttribute("aria-label", "Toque para continuar");
+    fig.addEventListener("click", function () {
+      if (!bloqueado) comemorarEAvancar();
+    });
+
     if (!Microfone.suportado) {
-      dica.textContent = "SEU NAVEGADOR NÃO OUVE A VOZ. TOQUE NO BICHINHO PARA CONTINUAR.";
-      // Fallback: sem reconhecimento, tocar na figura avança.
-      fig.style.cursor = "pointer";
-      fig.addEventListener("click", function () {
-        if (!bloqueado) comemorarEAvancar();
-      });
+      // Sem reconhecimento: esconde o botão de microfone e orienta o toque.
+      btnMic.hidden = true;
+      dica.textContent = "TOQUE NO BICHINHO PARA CONTINUAR 👆";
     } else {
       btnMic.addEventListener("click", function () {
         if (bloqueado) return;
         escutarResposta(btnMic, dica);
       });
+      dica.textContent = "TOQUE NO 🎙️ PARA FALAR — OU NO BICHINHO PARA CONTINUAR";
     }
 
     narrarHistoria(function () {
@@ -400,6 +417,11 @@ const Fase1 = (function () {
 
   function escutarResposta(btnMic, dica) {
     const esperados = [cenaAtual.resposta].concat(cenaAtual.sinonimos || []);
+
+    // Silencia qualquer narração antes de ouvir: o reconhecimento de fala e o
+    // TTS competem pelo áudio no celular, e ouvir a própria voz do jogo
+    // atrapalha o reconhecimento.
+    Voz.parar();
 
     Microfone.ouvir({
       aoComecar: function () {
@@ -420,13 +442,16 @@ const Fase1 = (function () {
       },
       aoErro: function (motivo) {
         if (motivo === "not-allowed" || motivo === "service-not-allowed") {
-          dica.textContent = "PRECISO DA SUA PERMISSÃO PARA OUVIR 🎙️";
-          Voz.falar("Preciso da sua permissão para usar o microfone.");
+          // Permissão negada: o microfone não vai funcionar. Orienta o toque.
+          dica.textContent = "SEM PERMISSÃO PARA O 🎙️ — TOQUE NO BICHINHO PARA CONTINUAR 👆";
+          Voz.falar("Sem problema! Toque no bichinho para continuar.");
         } else if (motivo === "no-speech") {
-          dica.textContent = "NÃO OUVI NADA. TENTE DE NOVO 🔊";
-          Voz.falar("Não ouvi nada, " + NOME + ". Tente falar de novo.");
+          dica.textContent = "NÃO OUVI NADA. TENTE DE NOVO OU TOQUE NO BICHINHO 👆";
+          Voz.falar("Não ouvi nada, " + NOME + ". Tente de novo, ou toque no bichinho.");
+        } else if (motivo === "nao-suportado") {
+          dica.textContent = "TOQUE NO BICHINHO PARA CONTINUAR 👆";
         } else {
-          dica.textContent = "TENTE DE NOVO 🔊";
+          dica.textContent = "TENTE DE NOVO OU TOQUE NO BICHINHO 👆";
         }
       },
       aoTerminar: function () {

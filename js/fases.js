@@ -246,4 +246,142 @@ const FASES = [
       },
     ],
   },
+
+  // ====================================================================
+  // FASE 4 — GATO, RATO E PATO
+  // Baseada na atividade do livro. As três palavras RIMAM (terminam em
+  // "-ATO"), então a criança treina justamente o SOM INICIAL diferente:
+  // G de GATO, R de RATO, P de PATO. Fecha falando o nome de um deles.
+  // ====================================================================
+  {
+    id: "gato-rato-pato",
+    titulo: "GATO, RATO E PATO",
+    icone: "🐱",
+    cenas: [
+      {
+        tipo: "fonico",
+        historia:
+          "A história tem três amigos que rimam: o GATO, o RATO e o PATO! Primeiro, vamos achar o GATO, que faz miau.",
+        pista: "G",
+        enunciado: "com a letra G",
+        cards: [
+          { nome: "GATO", figura: "🐱" },
+          { nome: "RATO", figura: "🐭" },
+          { nome: "PATO", figura: "🦆" },
+        ],
+        correta: "GATO",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "O GATO saiu correndo atrás de um bichinho pequeno e cinza que adora queijo. Ache o RATO!",
+        pista: "R",
+        enunciado: "com a letra R",
+        cards: [
+          { nome: "RATO", figura: "🐭" },
+          { nome: "PATO", figura: "🦆" },
+          { nome: "GATO", figura: "🐱" },
+        ],
+        correta: "RATO",
+      },
+      {
+        tipo: "arrasta",
+        historia:
+          "Chegou nadando na lagoa o amigo amarelo que faz quá-quá. Vamos montar o nome dele: PATO!",
+        figura: "🦆",
+        palavra: "PATO",
+        inicio: "",
+        lacuna: "PA",
+        fim: "TO",
+        opcoes: ["PA", "GA", "RA"],
+      },
+      {
+        tipo: "microfone",
+        historia:
+          "Os três amigos ficaram juntos: gato, rato e pato! Agora fale o nome do bichinho que faz miau.",
+        figura: "🐱",
+        resposta: "GATO",
+        sinonimos: ["gatinho", "gata"],
+      },
+    ],
+  },
+
+  // ====================================================================
+  // FASE 5 — O TÍTULO E MEU NOME
+  // Baseada na página do livro: primeiro reconhecer o SINAL DE PERGUNTA (?)
+  // do título "RATOS GOSTAM DE QUEIJO?", depois montar o próprio nome
+  // ANTONELLA sílaba por sílaba (AN-TO-NE-LA). Montar o próprio nome é um
+  // reforço afetivo forte para a criança.
+  //
+  // Observação sobre o "arrasta": o motor tem UMA lacuna por cena. Então
+  // montamos o nome em ETAPAS — cada cena preenche uma sílaba e mostra as
+  // anteriores já no lugar (campo "inicio") para o nome ir aparecendo.
+  // ====================================================================
+  {
+    id: "meu-nome",
+    titulo: "O TÍTULO E MEU NOME",
+    icone: "🔤",
+    cenas: [
+      {
+        tipo: "fonico",
+        historia:
+          "O título da história é uma pergunta: RATOS GOSTAM DE QUEIJO? Toda pergunta termina com um sinalzinho especial. Vamos achar o SINAL DE PERGUNTA!",
+        // Enunciado e narração livres: a frase padrão "ache o que começa"
+        // não serve para pontuação.
+        enunciadoLivre: "ACHE O SINAL DE PERGUNTA",
+        narracaoDesafio:
+          "Ache o sinal de pergunta, " + "Antonella" + ". É o que usamos quando perguntamos alguma coisa.",
+        cards: [
+          { nome: "?", figura: "❓" },
+          { nome: "!", figura: "❗" },
+          { nome: ".", figura: "🔵" },
+        ],
+        correta: "?",
+      },
+      {
+        tipo: "arrasta",
+        historia:
+          "Agora vamos escrever o seu nome, sílaba por sílaba! Comece montando a primeira parte: AN.",
+        figura: "🌟",
+        palavra: "ANTONELLA",
+        inicio: "",
+        lacuna: "AN",
+        fim: "TONELA",
+        opcoes: ["AN", "TO", "LA"],
+      },
+      {
+        tipo: "arrasta",
+        historia:
+          "Muito bem! Agora a segunda parte do seu nome: TO.",
+        figura: "🌟",
+        palavra: "ANTONELLA",
+        inicio: "AN",
+        lacuna: "TO",
+        fim: "NELA",
+        opcoes: ["TO", "NE", "AN"],
+      },
+      {
+        tipo: "arrasta",
+        historia:
+          "Está quase lá! A terceira parte é: NE.",
+        figura: "🌟",
+        palavra: "ANTONELLA",
+        inicio: "ANTO",
+        lacuna: "NE",
+        fim: "LLA",
+        opcoes: ["NE", "LLA", "TO"],
+      },
+      {
+        tipo: "arrasta",
+        historia:
+          "A última parte para completar o seu nome: LLA. Você vai escrever ANTONELLA inteiro!",
+        figura: "🌟",
+        palavra: "ANTONELLA",
+        inicio: "ANTONE",
+        lacuna: "LLA",
+        fim: "",
+        opcoes: ["LLA", "NE", "AN"],
+      },
+    ],
+  },
 ];

@@ -84,6 +84,13 @@ body {
   animation: aparecer 0.5s ease;
 }
 
+/* Num flex-column com overflow, os filhos encolhem por padrão (flex-shrink:1)
+   e o conteúdo é comprimido/cortado em vez de gerar rolagem. Impedimos o
+   encolhimento dos filhos diretos para a tela rolar de verdade no celular. */
+.tela > * {
+  flex-shrink: 0;
+}
+
 /* Telas centralizadas: quando o conteúdo é MAIOR que a altura visível, o
    flexbox com justify-content:center cortaria o topo (sem como rolar até
    ele). Garantimos o alinhamento ao topo nesse caso mantendo a rolagem. */

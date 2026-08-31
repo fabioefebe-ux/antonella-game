@@ -480,6 +480,9 @@ const Cacada = (function () {
   // Escuta a criança e valida o fonema/palavra falado.
   function escutarFonema(btnMic, dica) {
     const aceitas = respostasAceitas();
+    // Silencia a narração antes de ouvir (TTS e reconhecimento competem pelo
+    // áudio no celular).
+    Voz.parar();
     // Registro discreto: pediu apoio de som ao usar o microfone também conta.
     Microfone.ouvir({
       aoComecar: function () {
