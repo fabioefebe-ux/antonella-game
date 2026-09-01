@@ -20,21 +20,24 @@
      NÍVEL 1 — Sons e letras iniciais (muito apoio visual)
        1. O Jardim da Antonella
        2. Gato, Rato e Pato
-       3. Sons da Fazenda
-       4. Caça às Letras
+       3. Maluquinhos por Bicho
+       4. Como Ele Se Sente? (emoções)
+       5. Que Som É Esse? (onomatopeias)
+       6. Sons da Fazenda
+       7. Caça às Letras
      NÍVEL 2 — Sílabas: contar e montar
-       5. Sílabas Sonoras
-       6. Quantas Sílabas?
-       7. Brincando com Sílabas
-       8. Montar a Palavra
-       9. O Título e Meu Nome
+       8. Sílabas Sonoras
+       9. Quantas Sílabas?
+       10. Brincando com Sílabas
+       11. Montar a Palavra
+       12. O Título e Meu Nome
      NÍVEL 3 — Percepção do texto (tipo, tamanho, espaço)
-       10. Tipos de Letras
-       11. Grande ou Pequeno?
-       12. Cadê o Espaço?
+       13. Tipos de Letras
+       14. Grande ou Pequeno?
+       15. Cadê o Espaço?
      NÍVEL 4 — Revisão e vocabulário (mais abstrato)
-       13. O Ratinho Esperto (revisão: usa várias mecânicas)
-       14. Palavras Amigas (sinônimos)
+       16. O Ratinho Esperto (revisão: usa várias mecânicas)
+       17. Palavras Amigas (sinônimos)
 
    Toda a narração e o design são herdados do motor, sem mudanças.
    Para trocar pelo conteúdo real do livro, edite apenas este arquivo.
@@ -143,7 +146,214 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 1 · FASE 3 — SONS DA FAZENDA
+  // NÍVEL 1 · FASE 3 — MALUQUINHOS POR BICHO
+  // Baseada na história em quadrinhos do livro: um GATO mantém os ratos
+  // longe de casa. Os personagens são dois gatos, RAMIRO e GATURRO. A fase
+  // trabalha som/letra inicial e montar os nomes, no tema gato x rato.
+  // ====================================================================
+  {
+    id: "maluquinhos-por-bicho",
+    titulo: "MALUQUINHOS POR BICHO",
+    icone: "😺",
+    cenas: [
+      {
+        tipo: "fonico",
+        historia:
+          "Na historinha, quem espanta os ratos de casa é o GATO! Vamos achar o GATO, que faz miau.",
+        pista: "G",
+        enunciado: "com a letra G",
+        cards: [
+          { nome: "GATO", figura: "🐱" },
+          { nome: "RATO", figura: "🐭" },
+          { nome: "OSSO", figura: "🦴" },
+        ],
+        correta: "GATO",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "Um dos gatos da história se chama RAMIRO. Qual é a primeira letra do nome RAMIRO?",
+        pista: "R",
+        enunciado: "o nome RAMIRO",
+        personagem: true,
+        cards: [
+          { nome: "R", figura: "🇷" },
+          { nome: "M", figura: "Ⓜ️" },
+          { nome: "G", figura: "🇬" },
+        ],
+        correta: "R",
+      },
+      {
+        tipo: "arrasta",
+        historia:
+          "O outro gato se chama GATURRO. Vamos montar o nome dele arrastando a sílaba certa!",
+        figura: "😼",
+        palavra: "GATURRO",
+        inicio: "",
+        lacuna: "GA",
+        fim: "TURRO",
+        opcoes: ["GA", "RA", "BO"],
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "Os gatos são famosos por perseguir um bichinho! Qual animal o gato adora correr atrás?",
+        enunciadoLivre: "QUAL ANIMAL O GATO PERSEGUE?",
+        narracaoDesafio:
+          "Qual animal o gato adora perseguir, Antonella? Toque no bichinho certo.",
+        cards: [
+          { nome: "RATO", figura: "🐭" },
+          { nome: "ABELHA", figura: "🐝" },
+          { nome: "PASSARINHO", figura: "🐦" },
+        ],
+        correta: "RATO",
+      },
+      {
+        tipo: "microfone",
+        historia:
+          "Os dois gatos, Ramiro e Gaturro, adoram fazer barulho! Fale bem alto o nome do bichinho que espanta o rato.",
+        figura: "🐱",
+        resposta: "GATO",
+        sinonimos: ["gatinho", "gata"],
+      },
+    ],
+  },
+
+  // ====================================================================
+  // NÍVEL 1 · FASE 4 — COMO ELE SE SENTE?
+  // Inspirada nos exercícios de EXPRESSÃO da HQ (o rato apavorado, o gato
+  // surpreso...). Reconhecer emoções em rostinhos — habilidade socioemocional
+  // valiosa na educação inclusiva. Usa o tipo fonico com enunciado livre:
+  // mostra rostos (emojis) e a criança acha o sentimento pedido.
+  // ====================================================================
+  {
+    id: "como-se-sente",
+    titulo: "COMO ELE SE SENTE?",
+    icone: "😊",
+    cenas: [
+      {
+        tipo: "fonico",
+        historia:
+          "Os rostinhos mostram como a gente se sente! Ache o rostinho que está FELIZ, bem contente.",
+        enunciadoLivre: "ACHE QUEM ESTÁ FELIZ",
+        narracaoDesafio: "Ache o rostinho feliz, Antonella. Bem contente!",
+        cards: [
+          { nome: "FELIZ", figura: "😄" },
+          { nome: "TRISTE", figura: "😢" },
+          { nome: "BRAVO", figura: "😠" },
+        ],
+        correta: "FELIZ",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "Na história, o rato ficou apavorado quando viu o gato! Ache o rostinho que está COM MEDO.",
+        enunciadoLivre: "ACHE QUEM ESTÁ COM MEDO",
+        narracaoDesafio: "Ache o rostinho com medo, Antonella. Bem assustado!",
+        cards: [
+          { nome: "COM MEDO", figura: "😱" },
+          { nome: "FELIZ", figura: "😄" },
+          { nome: "SURPRESO", figura: "😮" },
+        ],
+        correta: "COM MEDO",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "Quando a gente fica chateado, o rostinho muda. Ache o rostinho que está TRISTE.",
+        enunciadoLivre: "ACHE QUEM ESTÁ TRISTE",
+        narracaoDesafio: "Ache o rostinho triste, Antonella.",
+        cards: [
+          { nome: "TRISTE", figura: "😢" },
+          { nome: "FELIZ", figura: "😄" },
+          { nome: "COM MEDO", figura: "😱" },
+        ],
+        correta: "TRISTE",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "E quando ficamos com raiva? Ache o rostinho que está BRAVO, com raivinha.",
+        enunciadoLivre: "ACHE QUEM ESTÁ BRAVO",
+        narracaoDesafio: "Ache o rostinho bravo, Antonella. Com raivinha!",
+        cards: [
+          { nome: "BRAVO", figura: "😠" },
+          { nome: "TRISTE", figura: "😢" },
+          { nome: "FELIZ", figura: "😄" },
+        ],
+        correta: "BRAVO",
+      },
+    ],
+  },
+
+  // ====================================================================
+  // NÍVEL 1 · FASE 5 — QUE SOM É ESSE?
+  // Baseada nos exercícios de ONOMATOPEIA (ligar o som ao animal). A criança
+  // ouve/lê o som e acha o animal que o faz. Conecta direto com o método
+  // fônico (som -> figura). Usa o tipo fonico com enunciado livre.
+  // ====================================================================
+  {
+    id: "que-som-e-esse",
+    titulo: "QUE SOM É ESSE?",
+    icone: "🔊",
+    cenas: [
+      {
+        tipo: "fonico",
+        historia:
+          "Cada bichinho faz um som diferente! Quem faz MIAU? Ache o bichinho certo!",
+        enunciadoLivre: "QUEM FAZ MIAU?",
+        narracaoDesafio: "Quem faz miau, Antonella? Ache o bichinho!",
+        cards: [
+          { nome: "GATO", figura: "🐱" },
+          { nome: "PATO", figura: "🦆" },
+          { nome: "LOBO", figura: "🐺" },
+        ],
+        correta: "GATO",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "Agora, quem faz QUÁ-QUÁ na beira da lagoa? Ache o bichinho!",
+        enunciadoLivre: "QUEM FAZ QUÁ-QUÁ?",
+        narracaoDesafio: "Quem faz quá quá, Antonella? Ache o bichinho!",
+        cards: [
+          { nome: "PATO", figura: "🦆" },
+          { nome: "GATO", figura: "🐱" },
+          { nome: "PORCO", figura: "🐷" },
+        ],
+        correta: "PATO",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "Quem faz AUUU para a lua lá na floresta? Ache o bichinho!",
+        enunciadoLivre: "QUEM FAZ AUUU?",
+        narracaoDesafio: "Quem faz auuu, Antonella? Ache o bichinho!",
+        cards: [
+          { nome: "LOBO", figura: "🐺" },
+          { nome: "GATO", figura: "🐱" },
+          { nome: "PATO", figura: "🦆" },
+        ],
+        correta: "LOBO",
+      },
+      {
+        tipo: "fonico",
+        historia:
+          "E quem faz OINC-OINC lá na lama da fazenda? Ache o bichinho!",
+        enunciadoLivre: "QUEM FAZ OINC-OINC?",
+        narracaoDesafio: "Quem faz oinc oinc, Antonella? Ache o bichinho!",
+        cards: [
+          { nome: "PORCO", figura: "🐷" },
+          { nome: "LOBO", figura: "🐺" },
+          { nome: "PATO", figura: "🦆" },
+        ],
+        correta: "PORCO",
+      },
+    ],
+  },
+
+  // ====================================================================
+  // NÍVEL 1 · FASE 6 — SONS DA FAZENDA
   // Associar a SÍLABA INICIAL ao animal (VA, GA, PO, CA).
   // ====================================================================
   {
@@ -207,7 +417,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 1 · FASE 4 — CAÇA ÀS LETRAS
+  // NÍVEL 1 · FASE 7 — CAÇA ÀS LETRAS
   // Encontrar a PRIMEIRA LETRA do nome do personagem (letras como cards).
   // ====================================================================
   {
@@ -275,7 +485,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 2 · FASE 5 — SÍLABAS SONORAS
+  // NÍVEL 2 · FASE 8 — SÍLABAS SONORAS
   // Consciência silábica: CONTAR quantas sílabas (tipo "contar") + montar.
   // ====================================================================
   {
@@ -334,7 +544,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 2 · FASE 6 — QUANTAS SÍLABAS?
+  // NÍVEL 2 · FASE 9 — QUANTAS SÍLABAS?
   // DISCRIMINAR o alimento com o número de sílabas pedido. Fecha contando.
   // ====================================================================
   {
@@ -397,7 +607,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 2 · FASE 7 — BRINCANDO COM SÍLABAS
+  // NÍVEL 2 · FASE 10 — BRINCANDO COM SÍLABAS
   // Sílaba INICIAL (RA) + MONTAR palavras (tênis, blusa, coroa).
   // ====================================================================
   {
@@ -455,7 +665,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 2 · FASE 8 — MONTAR A PALAVRA
+  // NÍVEL 2 · FASE 11 — MONTAR A PALAVRA
   // Montar palavras maiores por sílabas (banana, laranja, bola, uva).
   // ====================================================================
   {
@@ -511,7 +721,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 2 · FASE 9 — O TÍTULO E MEU NOME
+  // NÍVEL 2 · FASE 12 — O TÍTULO E MEU NOME
   // Sinal de pergunta (?) + montar o próprio nome ANTONELLA por sílabas.
   // (Palavra mais longa = passo mais difícil dentro do nível das sílabas.)
   // ====================================================================
@@ -580,7 +790,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 3 · FASE 10 — TIPOS DE LETRAS
+  // NÍVEL 3 · FASE 13 — TIPOS DE LETRAS
   // Parear a mesma palavra em MAIÚSCULA e minúscula + achar letra + montar.
   // ====================================================================
   {
@@ -639,7 +849,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 3 · FASE 11 — GRANDE OU PEQUENO?
+  // NÍVEL 3 · FASE 14 — GRANDE OU PEQUENO?
   // Achar a mesma palavra escrita bem grande ou pequenininha.
   // ====================================================================
   {
@@ -680,7 +890,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 3 · FASE 12 — CADÊ O ESPAÇO?
+  // NÍVEL 3 · FASE 15 — CADÊ O ESPAÇO?
   // Achar onde fica o espaço entre duas palavrinhas grudadas.
   // ====================================================================
   {
@@ -737,7 +947,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 4 · FASE 13 — O RATINHO ESPERTO (revisão)
+  // NÍVEL 4 · FASE 16 — O RATINHO ESPERTO (revisão)
   // Reúne 5 mecânicas num só bichinho: achar, contar, parear, falar, montar.
   // ====================================================================
   {
@@ -798,7 +1008,7 @@ const FASES = [
   },
 
   // ====================================================================
-  // NÍVEL 4 · FASE 14 — PALAVRAS AMIGAS (sinônimos)
+  // NÍVEL 4 · FASE 17 — PALAVRAS AMIGAS (sinônimos)
   // O mais abstrato: achar a palavra que quer dizer o mesmo (vocabulário).
   // ====================================================================
   {

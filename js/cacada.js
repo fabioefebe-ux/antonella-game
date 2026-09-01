@@ -732,6 +732,7 @@ const Cacada = (function () {
   function reforcoPositivo() {
     Aplauso.tocar();          // som de aplausos (Web Audio)
     Confete.explodir(180);    // confete
+    if (typeof Kiara !== "undefined" && Kiara.vibrarAcerto) Kiara.vibrarAcerto();
     const inicial = temaAtual.alvo.palavra.charAt(0);
     const vogalSeguinte = proximaVogal();
     // "LLLLL com O faz LÓ!"

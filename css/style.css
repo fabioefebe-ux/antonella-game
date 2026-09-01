@@ -81,7 +81,20 @@ body {
 
 .tela--ativa {
   display: flex;
-  animation: aparecer 0.5s ease;
+  animation: aparecer 0.35s ease;
+}
+
+/* Tela saindo: fade-out rápido coordenado com a entrada da próxima.
+   Fica visível (display:flex) durante a animação de saída. */
+.tela--saindo {
+  display: flex !important;
+  animation: sumir 0.22s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes sumir {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.98); }
 }
 
 /* Num flex-column com overflow, os filhos encolhem por padrão (flex-shrink:1)
@@ -120,7 +133,8 @@ body {
   line-height: 1.1;
   color: #fff;
   text-shadow: 0 4px 0 var(--cor-rosa), 0 8px 12px rgba(0, 0, 0, 0.2);
-  animation: flutuar 3s ease-in-out infinite;
+  /* Sem flutuação infinita: o menu já tem a Kiara animada. Menos estímulos
+     simultâneos = mais foco (importante no público inclusivo). */
 }
 
 @keyframes flutuar {
@@ -169,12 +183,13 @@ body {
 
 .botao--jogar {
   background: linear-gradient(180deg, #ff7ab6, var(--cor-rosa));
-  animation: pulsar 1.6s ease-in-out infinite;
+  /* Pulsar mais lento e sutil: destaca a ação principal sem agitar a tela. */
+  animation: pulsar 2.6s ease-in-out infinite;
 }
 
 @keyframes pulsar {
   0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.06); }
+  50%      { transform: scale(1.03); }
 }
 
 .botao__icone {
@@ -224,19 +239,22 @@ body {
 .estrela {
   position: absolute;
   font-size: 2.5rem;
-  opacity: 0.8;
-  animation: girar 6s linear infinite;
+  /* Fundo discreto: mais transparente e giro bem lento, para decorar sem
+     competir com o conteúdo por atenção. */
+  opacity: 0.4;
+  animation: girar 14s linear infinite;
 }
 
-.estrela:nth-child(1) { top: 12%; left: 10%; animation-duration: 7s; }
-.estrela:nth-child(2) { top: 22%; right: 12%; animation-duration: 5s; }
-.estrela:nth-child(3) { bottom: 18%; left: 16%; animation-duration: 8s; }
-.estrela:nth-child(4) { bottom: 12%; right: 18%; animation-duration: 6s; }
-.estrela:nth-child(5) { top: 45%; left: 48%; animation-duration: 9s; }
+.estrela:nth-child(1) { top: 12%; left: 10%; animation-duration: 16s; }
+.estrela:nth-child(2) { top: 22%; right: 12%; animation-duration: 13s; }
+.estrela:nth-child(3) { bottom: 18%; left: 16%; animation-duration: 18s; }
+.estrela:nth-child(4) { bottom: 12%; right: 18%; animation-duration: 15s; }
+.estrela:nth-child(5) { top: 45%; left: 48%; animation-duration: 20s; }
 
 @keyframes girar {
+  /* Giro suave, sem o "pop" de escala grande que chamava muita atenção. */
   from { transform: rotate(0) scale(1); }
-  50%  { transform: rotate(180deg) scale(1.2); }
+  50%  { transform: rotate(180deg) scale(1.08); }
   to   { transform: rotate(360deg) scale(1); }
 }
 
@@ -1007,6 +1025,19 @@ body {
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
 }
 
+/* Fase já concluída: borda verde suave + selo de estrela no canto. */
+.card--fase-feita {
+  border: 3px solid var(--cor-verde);
+}
+
+.card--fase__selo {
+  position: absolute;
+  top: -12px;
+  right: -10px;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.25));
+}
+
 /* ---------------- Palco (arraste / microfone) ---------------- */
 .palco {
   display: flex;
@@ -1196,6 +1227,237 @@ body {
 
 .feedback--acerto { border: 6px solid var(--cor-verde); }
 .feedback--erro   { border: 6px solid var(--cor-amarelo); }
+
+/* ---------------- Botão Minhas Medalhas (menu) ---------------- */
+.botao--album {
+  background: linear-gradient(160deg, #ffe08a, #ffb347);
+  color: #7a4a00;
+}
+
+/* ======================================================================
+   TELA DE COMEMORAÇÃO (fim de fase) — a Kiara celebra com a Antonella
+   ====================================================================== */
+.comemora {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  max-width: 560px;
+}
+
+/* A Kiara pulando de alegria. */
+.comemora__kiara {
+  font-size: clamp(5rem, 22vw, 9rem);
+  animation: kiara-pula 0.9s ease-in-out infinite;
+}
+
+@keyframes kiara-pula {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-18px) rotate(4deg); }
+}
+
+.comemora__titulo {
+  font-size: clamp(2rem, 8vw, 3.4rem);
+  font-weight: 700;
+  color: var(--cor-rosa-forte, #e84e9c);
+}
+
+.comemora__estrelas {
+  font-size: clamp(2.2rem, 9vw, 3.6rem);
+  letter-spacing: 0.1em;
+  min-height: 1.2em;
+}
+
+.comemora__frase {
+  font-size: clamp(1.2rem, 4.5vw, 1.8rem);
+  font-weight: 600;
+  color: var(--cor-texto);
+  line-height: 1.4;
+  max-width: 32ch;
+}
+
+/* Caixa da medalha nova conquistada. */
+.comemora__medalha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(160deg, #fff4cc, #ffe08a);
+  border-radius: 22px;
+  padding: 14px 22px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+  animation: medalha-surge 0.6s ease;
+}
+
+@keyframes medalha-surge {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.medalha-nova__emoji { font-size: clamp(2.4rem, 9vw, 3.4rem); }
+.medalha-nova__texto {
+  text-align: left;
+  font-weight: 700;
+  color: #7a4a00;
+  font-size: clamp(0.9rem, 3.4vw, 1.2rem);
+}
+
+.comemora__acoes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* ======================================================================
+   ÁLBUM DE MEDALHAS
+   ====================================================================== */
+.album {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+}
+
+.album__kiara { font-size: clamp(3.5rem, 14vw, 5.5rem); }
+
+.album__titulo {
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  font-weight: 700;
+  color: var(--cor-rosa-forte, #e84e9c);
+}
+
+.album__contagem {
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.album__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Cada medalha (ganha ou ainda bloqueada). */
+.medalha {
+  background: #fff;
+  border-radius: 22px;
+  padding: 16px 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.medalha--bloqueada {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.medalha__emoji { font-size: clamp(2.4rem, 10vw, 3.4rem); }
+.medalha__titulo {
+  font-weight: 700;
+  font-size: clamp(0.85rem, 3.2vw, 1.05rem);
+  color: var(--cor-texto);
+}
+.medalha__descricao {
+  font-size: clamp(0.75rem, 2.8vw, 0.95rem);
+  color: #666;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+/* ---------------- Botão Eu Sou Especial (menu) ---------------- */
+.botao--espelho {
+  background: linear-gradient(160deg, #ffd0e6, #ff9ec7);
+  color: #8a2b5e;
+}
+
+/* ======================================================================
+   ESPELHO DE AFIRMAÇÕES — a Antonella repete afirmações positivas
+   ====================================================================== */
+.espelho {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+}
+
+.espelho__kiara { font-size: clamp(3.2rem, 13vw, 5rem); }
+
+.espelho__titulo {
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  font-weight: 700;
+  color: var(--cor-rosa-forte, #e84e9c);
+}
+
+.espelho__intro {
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.espelho__cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Cada cartão de afirmação: grande, tocável, colorido e carinhoso. */
+.afirmacao {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 24px;
+  padding: 22px 16px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+  font-size: clamp(1.1rem, 4.2vw, 1.5rem);
+  font-weight: 700;
+  color: var(--cor-texto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s ease;
+}
+
+.afirmacao__coracao { font-size: clamp(1.6rem, 6vw, 2.2rem); }
+
+/* Cores alternadas suaves para os cartões (pastel). */
+.afirmacao:nth-child(6n+1) { background: #ffe3ef; }
+.afirmacao:nth-child(6n+2) { background: #e3f3ff; }
+.afirmacao:nth-child(6n+3) { background: #fff4cc; }
+.afirmacao:nth-child(6n+4) { background: #e6ffe9; }
+.afirmacao:nth-child(6n+5) { background: #f0e6ff; }
+.afirmacao:nth-child(6n+6) { background: #ffe9dc; }
+
+/* Realce quando a criança toca e a afirmação é falada. */
+.afirmacao--ativa {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+@media (hover: hover) {
+  .afirmacao:hover { transform: translateY(-4px); }
+}
 
 /* ---------------- Acessibilidade: reduzir movimento ---------------- */
 @media (prefers-reduced-motion: reduce) {

@@ -29,6 +29,7 @@ const Fase1 = (function () {
   let indiceCena = 0;
   let cenaAtual = null;
   let bloqueado = false;
+  let errouNaCena = false; // p/ a medalha "Não Desisti" (errar e depois acertar)
   let aoConcluir = null;
 
   // ---------------- Utilidades ----------------
@@ -60,24 +61,47 @@ const Fase1 = (function () {
   function comemorarEAvancar() {
     bloqueado = true;
     Confete.explodir(160);
+    if (typeof Kiara !== "undefined") Kiara.vibrarAcerto();
     mostrarFeedback("⭐ PARABÉNS, " + NOME + "! VOCÊ CONSEGUIU! ⭐", "acerto");
+    // Medalha "Não Desisti": acertou depois de ter errado nesta cena.
+    // Avisa o jogo (o jogo.js concede a medalha na comemoração, para ela
+    // aparecer como "nova medalha" na tela de fim de fase).
+    if (errouNaCena && typeof Fase1.aoNaoDesistir === "function") {
+      Fase1.aoNaoDesistir();
+    }
     if (typeof Fase1.aoGanharEstrela === "function") Fase1.aoGanharEstrela();
-    Voz.falar("Parabéns, " + NOME + "! Você conseguiu!", {
-      audio: "parabens",
-      aoTerminar: function () {
-        setTimeout(avancarCena, 700);
-      },
-    });
+    // Elogio variado da Kiara (esforço/capacidade/afeto). Cai no áudio
+    // pré-gravado "parabens" só se a Kiara não estiver disponível.
+    if (typeof Kiara !== "undefined") {
+      Voz.falar(Kiara.elogio(), {
+        aoTerminar: function () {
+          setTimeout(avancarCena, 700);
+        },
+      });
+    } else {
+      Voz.falar("Parabéns, " + NOME + "! Você conseguiu!", {
+        audio: "parabens",
+        aoTerminar: function () {
+          setTimeout(avancarCena, 700);
+        },
+      });
+    }
   }
 
   function incentivarErro() {
+    errouNaCena = true; // marca que houve erro (para a medalha "Não Desisti")
     mostrarFeedback("QUASE LÁ, " + NOME + "! TENTE OUVIR DE NOVO 🔊", "erro");
-    Voz.falar("Quase lá, " + NOME + "! Tente ouvir de novo.", { audio: "quase_la" });
+    if (typeof Kiara !== "undefined") {
+      Voz.falar(Kiara.incentivo());
+    } else {
+      Voz.falar("Quase lá, " + NOME + "! Tente ouvir de novo.", { audio: "quase_la" });
+    }
   }
 
   // ---------------- Renderização por tipo ----------------
   function renderizarCena() {
     bloqueado = false;
+    errouNaCena = false;
     cenaAtual = cenas[indiceCena];
     limparPalco();
 
@@ -876,5 +900,5 @@ const Fase1 = (function () {
     renderizarCena();
   }
 
-  return { iniciar, aoGanharEstrela: null };
+  return { iniciar, aoGanharEstrela: null, aoNaoDesistir: null };
 })();

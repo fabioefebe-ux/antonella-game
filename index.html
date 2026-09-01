@@ -27,7 +27,8 @@
 
     <h1 class="titulo-jogo">MUNDO MÁGICO<br />DA ANTONELLA</h1>
 
-    <div class="mascote" aria-hidden="true">🦄</div>
+    <!-- A Kiara, a gatinha frajola, companheira da Antonella -->
+    <div class="mascote" aria-hidden="true">🐈‍⬛</div>
 
     <button id="btn-jogar" class="botao botao--gigante botao--jogar">
       <span class="botao__icone" aria-hidden="true">▶</span>
@@ -37,6 +38,16 @@
     <button id="btn-cacada" class="botao botao--gigante botao--cacada">
       <span class="botao__icone" aria-hidden="true">🔍</span>
       <span class="botao__texto">A CAÇADA DOS SONS</span>
+    </button>
+
+    <button id="btn-album" class="botao botao--gigante botao--album">
+      <span class="botao__icone" aria-hidden="true">🏅</span>
+      <span class="botao__texto">MINHAS MEDALHAS</span>
+    </button>
+
+    <button id="btn-espelho" class="botao botao--gigante botao--espelho">
+      <span class="botao__icone" aria-hidden="true">💖</span>
+      <span class="botao__texto">EU SOU ESPECIAL</span>
     </button>
 
     <button id="btn-ouvir-titulo" class="botao botao--audio" aria-label="Ouvir o nome do jogo">
@@ -170,6 +181,66 @@
     </div>
   </section>
 
+  <!-- ==================== TELA DE COMEMORAÇÃO (fim de fase) ==================== -->
+  <section id="tela-comemora" class="tela">
+    <div class="comemora">
+      <div class="comemora__kiara" aria-hidden="true">🐈‍⬛</div>
+      <h2 id="comemora-titulo" class="comemora__titulo">VOCÊ CONSEGUIU!</h2>
+      <div id="comemora-estrelas" class="comemora__estrelas" aria-label="Estrelas conquistadas"></div>
+      <p id="comemora-frase" class="comemora__frase"></p>
+
+      <!-- Espaço para uma medalha nova, se houver -->
+      <div id="comemora-medalha" class="comemora__medalha" hidden>
+        <div class="medalha-nova__emoji" aria-hidden="true"></div>
+        <div class="medalha-nova__texto"></div>
+      </div>
+
+      <div class="comemora__acoes">
+        <button id="comemora-proxima" class="botao botao--gigante botao--jogar">
+          <span class="botao__icone" aria-hidden="true">▶</span>
+          <span class="botao__texto">PRÓXIMA</span>
+        </button>
+        <button id="comemora-album" class="botao botao--cacada">
+          <span aria-hidden="true">🏅</span>
+          <span class="botao__texto-pequeno">MINHAS MEDALHAS</span>
+        </button>
+        <button id="comemora-menu" class="botao botao--voltar" aria-label="Voltar ao menu">
+          <span aria-hidden="true">🏠</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ÁLBUM DE MEDALHAS ==================== -->
+  <section id="tela-album" class="tela">
+    <header class="jogo-topo">
+      <button id="album-voltar" class="botao botao--voltar" aria-label="Voltar ao menu">
+        <span aria-hidden="true">🏠</span>
+      </button>
+    </header>
+    <div class="album">
+      <div class="album__kiara" aria-hidden="true">🐈‍⬛</div>
+      <h2 class="album__titulo">AS MEDALHAS DA ANTONELLA</h2>
+      <p id="album-contagem" class="album__contagem"></p>
+      <div id="album-grade" class="album__grade"><!-- medalhas geradas pelo JS --></div>
+    </div>
+  </section>
+
+  <!-- ==================== ESPELHO DE AFIRMAÇÕES ==================== -->
+  <section id="tela-espelho" class="tela">
+    <header class="jogo-topo">
+      <button id="espelho-voltar" class="botao botao--voltar" aria-label="Voltar ao menu">
+        <span aria-hidden="true">🏠</span>
+      </button>
+    </header>
+    <div class="espelho">
+      <div class="espelho__kiara" aria-hidden="true">🐈‍⬛</div>
+      <h2 class="espelho__titulo">O ESPELHO DA ANTONELLA</h2>
+      <p class="espelho__intro">TOQUE E REPITA COM A KIARA:</p>
+      <div id="espelho-cartoes" class="espelho__cartoes"><!-- cartões gerados pelo JS --></div>
+    </div>
+  </section>
+
   <!-- ==================== CAMADA DE CONFETES ==================== -->
   <canvas id="canvas-confete" class="canvas-confete" aria-hidden="true"></canvas>
 
@@ -177,6 +248,7 @@
   <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
 
   <script src="js/voz.js"></script>
+  <script src="js/kiara.js"></script>
   <script src="js/confete.js"></script>
   <script src="js/microfone.js"></script>
   <script src="js/fases.js"></script>
